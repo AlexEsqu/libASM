@@ -1,8 +1,72 @@
 # libASM
 
-Intel assembly language
+
+## What is a computer?
+
+```
+	____data bus___________________________________
+ ___|__			 ___|____		 ___|___________
+/		\		/		 \		/				\
+|  CPU 	|		| Memory |		| I/O devices	|
+\_______/		\________/		\_______________/
+  |  |	control	   | |				|	|
+  |  |____bus______|_|______________|___|_____________
+  |				   |				|
+  |__address_bus___|________________|_____________
+
+```
+
+### Bus
+Communication between pieces of hardware
+- **Control Bus**:
+Synchronize action between all devices, where reading / writing
+- **Address Bus**:
+Holds address of instruction in data, where working
+- **Data Bus**:
+Handle transfer of data between CPU, I/O, Memory...
+
+### CPU
+- **High Frequency Clock**:
+Ticks at constant rate between on and off to synchronize CPU and bus, every tick does one operation, measured in oscillations per second (1 GHz = 1 billion times / second)
+- **Arithmetic Logic Unit**:
+Special part of CPU which does all computation sur as ADD, OR, AND, etc.
+- **Memory Registers**:
+Very fast memory storage on the CPU itself
+- **Control Unit**:
+Decode instruction to direct operation to other unit (I/O, Memory...)
+
+### Instruction Execution Cycle
+Predefined steps to execute instruction, known as **fetch decode execute**
+1. fetch instruction from instruction queue
+2. decode instruction and check for operand
+3. if operand, fetch from memory / registers
+4. execute instruction and update status flags
+5. store result if needed
+
+### Memory
+
+Reading from memory is slow, ~ 4 clock cycle
+1. place address of value to read on address bus
+2. assert (change processor RD pin)
+3. wait one clock cycle for memory response
+4. copy data from data bus to destination
+
+Reading from register is very fast, ~ 1 clock cycle
+
+#### Cache
+Memory wth static RAM used to reduce time to access some memory
+- Level 1 cache stored on CPU
+- Level 2 stored outside accessed by high-speed data bs
+
+### Processor Modes
+
+- Protected Mode: native processor state, can access eveyr feature so long as does not modify other process memory
+- Real Address Mode : can access all parts of component / hardware devices
+- System Management Mode : design a system for a chip specifically
 
 ## Registers
+
+### History
 
 1972: **8-bit** 8008 Intel processor, with general registers labelled A, B, C, D and stack pointer
 
@@ -16,11 +80,15 @@ Intel assembly language
 
 **x64** architecture: Backward-compatible extension of x86, which extends x86's 8 general purpose registers to be 64-bit and adds 8 new ones named r5 to r15, all prefixed with R for register
 
-For backward compatibility reasons, writing to EAX, EBX, ECX or EDX will zero out the rest of the register
+For backward compatibility reasons, writing to EAX, EBX, ECX or EDX will zero out the rest of the register (ie the smaller declination such as AX, AH, AL for EAX)
 
-### General purpose registers
 
-#### RAX : **Accumulator**, for arithmetics
+
+### General Purpose Registers
+
+#### 1. RAX : **Accumulator**
+
+Automatically used for multiplication and division
 
 ```
 RAX : 0000 0000 0000 0000 0000 0000 0000 0000
@@ -30,7 +98,7 @@ RAX : 0000 0000 0000 0000 0000 0000 0000 0000
 									 AL: 0000
 ```
 
-#### RBX : **Base**, to access memory / offset
+#### 2. RBX : **Base**, to access memory / offset
 
 ```
 RBX : 0000 0000 0000 0000 0000 0000 0000 0000
@@ -40,7 +108,9 @@ RBX : 0000 0000 0000 0000 0000 0000 0000 0000
 									 BL: 0000
 ```
 
-#### RCX : **Counter**, for loops and shifts
+#### 3. RCX : **Counter**, for loops and shifts
+
+Used as loop counter by CPU
 
 ```
 RCX : 0000 0000 0000 0000 0000 0000 0000 0000
@@ -50,7 +120,7 @@ RCX : 0000 0000 0000 0000 0000 0000 0000 0000
 									 CL: 0000
 ```
 
-#### RDX : **Data**, for overflow, result of multiply and divide
+#### 4. RDX : **Data**
 
 ```
 RDX : 0000 0000 0000 0000 0000 0000 0000 0000
@@ -60,7 +130,7 @@ RDX : 0000 0000 0000 0000 0000 0000 0000 0000
 									 DL: 0000
 ```
 
-#### RSI : **Source Index**, for string operation
+#### 5. RSI : **Source Index**
 
 ```
 RSI : 0000 0000 0000 0000 0000 0000 0000 0000
@@ -69,7 +139,7 @@ RSI : 0000 0000 0000 0000 0000 0000 0000 0000
 									SIL: 0000
 ```
 
-#### RDI : **Destination Index**, for string operation
+#### 6. RDI : **Destination Index**
 
 ```
 RDI : 0000 0000 0000 0000 0000 0000 0000 0000
@@ -78,7 +148,9 @@ RDI : 0000 0000 0000 0000 0000 0000 0000 0000
 									DIL: 0000
 ```
 
-#### RBP : **Base Pointer**
+#### 7. RBP : **Base Pointer**
+
+Reference function parameters and local variables on the stack
 
 ```
 RBP : 0000 0000 0000 0000 0000 0000 0000 0000
@@ -87,7 +159,9 @@ RBP : 0000 0000 0000 0000 0000 0000 0000 0000
 									BPL: 0000
 ```
 
-#### RSP : **Stack pointer**
+#### 8. RSP : **Stack pointer**
+
+Points to current stack address
 
 ```
 RSP : 0000 0000 0000 0000 0000 0000 0000 0000
@@ -96,7 +170,7 @@ RSP : 0000 0000 0000 0000 0000 0000 0000 0000
 									SPL: 0000
 ```
 
-#### R8, R9, R10, R11, R12, R13, R14, R15
+#### 9 - 16. R8, R9, R10, R11, R12, R13, R14, R15
 
 ```
 R8 : 0000 0000 0000 0000 0000 0000 0000 0000
@@ -105,5 +179,21 @@ R8 : 0000 0000 0000 0000 0000 0000 0000 0000
 								   R8B: 0000
 ```
 
-## Calling convention
+### Special Purpose Registers
 
+#### EIP
+Instruction pointer, pointing to address of next instruction
+
+#### EFLAGS
+Flags denoting status of an operation
+- CF (carry flag)
+- OF (overflow flag)
+- SF (sign flag)
+- ZF (zero flag)
+- AC (auxilliary flag)
+- PF (parity flag)
+
+
+## NASM
+
+x86 syntax based on Intel, more approachable than AT&T syntax
