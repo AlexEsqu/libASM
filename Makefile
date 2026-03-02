@@ -12,6 +12,8 @@ SRC_DIR_ASM = libASM
 
 OBJ_DIR = obj
 
+LIBFT_ASM_DIR = libft_ASM
+
 INC_DIR = inc
 
 
@@ -37,21 +39,55 @@ ASM		= nasm
 
 CFLAGS		= -Wall -Wextra -Werror
 DEBUGFLAG	= -g
+ASMGENFLAG	= -S -mllvm --x86-asm-syntax=intel
 ASMFLAGS	= -f elf64
 
+#####################################
+#									#
+#			MANDATORY RULES			#
+#									#
+#####################################
 
-# General rules
-all:		$(LIBFT) $(NAME)
+all:		$(NAME)
 
+$(NAME):	$(OBJ_DIR) $(OBJS_ASM)
+			ar rcs $(NAME) $(OBJS_ASM)
+
+clean:
+			rm -f $(OBJS_C) $(OBJS_ASM)
+			rm -rf $(OBJ_DIR)
+			rm -rf $(LIBFT_ASM_DIR)
+
+fclean:		clean
+			rm -f $(LIBFT) $(NAME)
+
+re:			fclean all
+
+
+#####################################
+#									#
+#			ADDON RULES				#
+#									#
+#####################################
+
+# Compile two executable from main, one with ASM library, one with C library
 test:		$(LIBFT) $(NAME)
 			$(CC) $(CFLAGS) main.c $(LIBFT) -o libftMain
 			$(CC) $(CFLAGS) main.c $(NAME) -o libasmMain
 
+# Compile code to ASM with intel syntax
+generate:	$(patsubst %.c,$(LIBFT_ASM_DIR)/%.s,$(SRCS_C))
+
+
+#####################################
+#									#
+#			ACTUAL RULES			#
+#									#
+#####################################
+
+
 $(LIBFT):	$(OBJ_DIR) $(OBJS_C)
 			ar rcs $(LIBFT) $(OBJS_C)
-
-$(NAME):	$(OBJ_DIR) $(OBJS_ASM)
-			ar rcs $(NAME) $(OBJS_ASM)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR_C)/%.c
 				$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
@@ -62,13 +98,10 @@ $(OBJ_DIR)/%.o: $(SRC_DIR_ASM)/%.s
 $(OBJ_DIR):
 				mkdir -p $@
 
-clean:
-			rm -f $(OBJS_C) $(OBJS_ASM)
-			rm -rf $(OBJ_DIR)
+$(LIBFT_ASM_DIR)/%.s:	$(SRC_DIR_C)/%.c
+						mkdir -p $(LIBFT_ASM_DIR)
+						$(CC) $(CFLAGS) $(ASMGENFLAG) $< -o $@
 
-fclean:		clean
-			rm -f $(LIBFT) $(NAME)
 
-re:			fclean all
 
-.PHONY:		all clean fclean re
+.PHONY:		all clean fclean re test generate

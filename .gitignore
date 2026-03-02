@@ -1,5 +1,7 @@
 a.out
 obj
 *.a
+*.o
 libftMain
 libasmMain
+libft_ASM
