@@ -191,7 +191,25 @@ Flags denoting status of an operation
 - SF (sign flag)
 - ZF (zero flag)
 - AC (auxilliary flag)
-- PF (parity flag)
+
+##### Carry flag (CF)
+represent a carry and borrow in substraction
+
+##### Auxilliary flag
+
+
+##### Signed Flag (SF)
+Set to 1 when operation produced a negative output
+
+##### Parity flag (PF)
+set to 1 when result is odd, to 0 if even
+
+Can help identify problem in transmitting data
+
+##### Interrupt Flag (IF)
+set to 1 when interrupt allowed
+
+Generally set at beginning of execution of the program
 
 
 ## ASM Syntax
@@ -202,10 +220,10 @@ Need to export an entry point to the program (`global _start`)
 
 To end program, `INT` interrupt, with `80h` calls exit syscall
 
-### To Assemble:
+### To assemble into object file using NASM:
 `nasm -f elf -o objectFileName.o sourceFile.s`
 
-### To load into binary:
+### To bind / link into binary targetting a specific architecture:
 `ld -m elf_i386 -o binaryName objectFile.o`
 
 ### To run in GDB:
@@ -230,3 +248,34 @@ For string, add null-terminator such as `str DB "ABA",0`
 
 ### To use variables:
 access varName address with `varName`, or value with `[varName]`
+
+
+## Arithmetic
+
+### Addition
+`ADD`
+
+### Subtraction
+`SUB`
+
+### Multiplication
+`MUL`: Will always use A register for result
+
+Will expand the register if the result is bigger than the register declination can use
+
+`IMUL` will assume all operands are signed
+
+### Division
+`DIV`: Will always use A register for result
+
+Will put remained in EDX
+
+`IDIV` will assume all operands are signed
+
+### Logical Operators
+- `AND`: 1 if both are 1, else 0
+- `OR`: 1 if any is 1, else 0
+- `NOT`: flip bits
+
+### Mask
+**Mask**: `AND` with a value, where values not set to any particular values are cleared such as `AND eax,0xF`

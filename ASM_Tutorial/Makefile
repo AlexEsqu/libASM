@@ -1,4 +1,4 @@
-NAME = char
+NAME = div
 
 all: $(NAME)
 
