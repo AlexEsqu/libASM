@@ -10,11 +10,11 @@ int main()
 
 	// // STRCPY
 
-	// char	buf[42];
-	// char*	ptr;
+	char	buf[42];
+	char*	ptr;
 
-	// ptr = ft_strcpy(buf, str);
-	// printf("strcpy prints: [%s]\n", buf);
+	ptr = ft_strcpy(buf, str);
+	printf("strcpy prints: [%s]\n", buf);
 
 	return (0);
 }

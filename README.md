@@ -194,6 +194,39 @@ Flags denoting status of an operation
 - PF (parity flag)
 
 
-## NASM
+## ASM Syntax
 
-x86 syntax based on Intel, more approachable than AT&T syntax
+NASM : x86 syntax based on Intel, more approachable than AT&T syntax
+
+Need to export an entry point to the program (`global _start`)
+
+To end program, `INT` interrupt, with `80h` calls exit syscall
+
+### To Assemble:
+`nasm -f elf -o objectFileName.o sourceFile.s`
+
+### To load into binary:
+`ld -m elf_i386 -o binaryName objectFile.o`
+
+### To run in GDB:
+- `gdb <binary>`
+- `layout asm`
+- `run`
+- `stepi` to step to next line
+- `info reigsters <register name>` to examine register content
+- `x/x <memory address>` to examine content of a memory address
+
+`echo "set disassembly-flavor intel" > ~/.gdbinit` to have intel style layout
+
+### To create variables:
+in `section .data`, set a name, size in bytes, and value, such as
+``` ASM
+section .data
+	num DD 5
+```
+Can separate values in a list with a `,` such as `list DB 1,3,5,6`
+
+For string, add null-terminator such as `str DB "ABA",0`
+
+### To use variables:
+access varName address with `varName`, or value with `[varName]`
