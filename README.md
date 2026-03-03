@@ -275,7 +275,36 @@ Will put remained in EDX
 ### Logical Operators
 - `AND`: 1 if both are 1, else 0
 - `OR`: 1 if any is 1, else 0
+- `XOR`: 1 if only one 1, else 0
 - `NOT`: flip bits
 
 ### Mask
 **Mask**: `AND` with a value, where values not set to any particular values are cleared such as `AND eax,0xF`
+
+### Shift
+`SHR`: shift value one bit to the right (ie divide by 2)
+
+`SHL`: shift value one bit to the left (ie multiply by 2)
+
+`SAR`: arithmetic shift to the right, preserve the sign bit
+
+`SAL`: arithmetic shift to the left, preserve the sign bit
+
+### Jump
+`JMP`: always jumps
+
+`JL`: jump low, if lesser than in last comparison
+
+`JLE`: jump equal or lower than
+
+`JG`: jump great, if greater than in last comparison
+
+`JGE`: jump equal or greater than
+
+`JE`: jump if equal
+
+`JNE`: jump if not equal
+
+`JZ`: jump if zero, similar to `JE` since comparison is 0 if equal
+
+`JNZ`: jump if not zero

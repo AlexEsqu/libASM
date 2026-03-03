@@ -1,4 +1,4 @@
-NAME = div
+NAME = jump
 
 all: $(NAME)
 
