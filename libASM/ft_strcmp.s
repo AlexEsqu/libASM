@@ -10,7 +10,9 @@ ft_strcmp:
 loop:
 	; COMPARE TO EACH OTHER
 	; can only compare if at least one value is held in a register
-	MOV al, byte [rcx]		; moves value of current character of string1 into subset of register A
+	MOV al, byte [rcx]		; moves value of current character of string1 into a byte sized subset of register A
+							; slightly faster to compare only byte by byte
+							; also provides the same values as the original strcmp
 	CMP al, byte [rdx]		; compare the character in register A and the one pointed to by register D
 	JNE endLoop				; if they are not equal, jump to end loop
 
@@ -25,7 +27,7 @@ loop:
 	JMP loop				; start the loop again
 
 endLoop:
-	SUB al, byte [rdx]		; subtract value of character pointed to by register D from register A
+	SUB al, byte [rdx]		; subtract byte value of character pointed to by register D from register A
 	MOVSX rax,al			; set register A's subset as the value of the whole 64 bits (pad with 0)
 	RET						; returns the value in register A
 
