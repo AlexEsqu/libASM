@@ -21,11 +21,7 @@ INC_DIR = inc
 
 # Files
 
-SRCS_C		= 	ft_strlen.c \
-				ft_strcmp.c \
-				ft_strcpy.c \
-				ft_strdup.c \
-				ft_strlen_in_C.c \
+SRCS_C		= 	ft_strlen_in_C.c \
 				ft_strcmp_in_C.c \
 				ft_strcpy_in_C.c \
 				ft_strdup_in_C.c
