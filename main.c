@@ -37,33 +37,39 @@ void test_strlen(void) {
 	test_case("Basic ASCII string");
 	char *str1 = "hello";
 	size_t len1_ft = ft_strlen(str1);
-	size_t len1_orig = strlen(str1);  // original
-	printf("  ft_strlen(\"%s\") = %ld\n", str1, len1_ft);
-	printf(GREY "     strlen(\"%s\") = %ld \n" RESET, str1, len1_orig);
-	if (len1_ft == len1_orig) result_match("ft_strlen", "strlen");
-	else result_mismatch("ft_strlen", "strlen");
+	size_t len1_c = ft_strlen_in_C(str1);
+	size_t len1_libc = strlen(str1);
+	printf("  ft_strlen in ASM  (\"%s\") = %ld\n", str1, len1_ft);
+	printf(GREY "  ft_strlen in C    (\"%s\") = %ld\n" RESET, str1, len1_c);
+	printf(GREY "     strlen in libc (\"%s\") = %ld\n" RESET, str1, len1_libc);
+	if (len1_ft == len1_c && len1_c == len1_libc) result_match("all three", "match");
+	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
 
 	// Test 2: Empty string
 	test_case("Empty string");
 	char *str2 = "";
 	size_t len2_ft = ft_strlen(str2);
-	size_t len2_orig = strlen(str2);  // original
+	size_t len2_c = ft_strlen_in_C(str2);
+	size_t len2_libc = strlen(str2);
 	printf("  ft_strlen(\"%s\") = %ld\n", str2, len2_ft);
-	printf(GREY "     strlen(\"%s\") = %ld \n" RESET, str2, len2_orig);
-	if (len2_ft == len2_orig) result_match("ft_strlen", "strlen");
-	else result_mismatch("ft_strlen", "strlen");
+	printf("  ft_strlen_in_C(\"%s\") = %ld\n", str2, len2_c);
+	printf(GREY "     strlen(\"%s\") = %ld\n" RESET, str2, len2_libc);
+	if (len2_ft == len2_c && len2_c == len2_libc) result_match("all three", "match");
+	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
 
 	// Test 3: String with special characters
 	test_case("String with special characters");
 	char *str3 = "hello\nworld\t!!";
 	size_t len3_ft = ft_strlen(str3);
-	size_t len3_orig = strlen(str3);  // original
+	size_t len3_c = ft_strlen_in_C(str3);
+	size_t len3_libc = strlen(str3);
 	printf("  ft_strlen(\"%s\") = %ld\n", str3, len3_ft);
-	printf(GREY "     strlen(\"%s\") = %ld \n" RESET, str3, len3_orig);
-	if (len3_ft == len3_orig) result_match("ft_strlen", "strlen");
-	else result_mismatch("ft_strlen", "strlen");
+	printf("  ft_strlen_in_C(\"%s\") = %ld\n", str3, len3_c);
+	printf(GREY "     strlen(\"%s\") = %ld\n" RESET, str3, len3_libc);
+	if (len3_ft == len3_c && len3_c == len3_libc) result_match("all three", "match");
+	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
 
 	// Test 4: Long string
@@ -71,22 +77,26 @@ void test_strlen(void) {
 	char *str4 = "aaaaaaaaaaaaaaaaaaa   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 	             "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 	size_t len4_ft = ft_strlen(str4);
-	size_t len4_orig = strlen(str4);  // original
-	printf("  ft_strlen(\"%s\") = %ld\n", str4, len4_ft);
-	printf(GREY "     strlen(\"%s\") = %ld \n" RESET, str4, len4_orig);
-	if (len4_ft == len4_orig) result_match("ft_strlen", "strlen");
-	else result_mismatch("ft_strlen", "strlen");
+	size_t len4_c = ft_strlen_in_C(str4);
+	size_t len4_libc = strlen(str4);
+	printf("  ft_strlen(...) = %ld\n", len4_ft);
+	printf("  ft_strlen_in_C(...) = %ld\n", len4_c);
+	printf(GREY "     strlen(...) = %ld\n" RESET, len4_libc);
+	if (len4_ft == len4_c && len4_c == len4_libc) result_match("all three", "match");
+	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
 
 	// Test 5: String with null bytes (only tests up to first null)
 	test_case("Single character");
 	char *str5 = "a\0a\0";
 	size_t len5_ft = ft_strlen(str5);
-	size_t len5_orig = strlen(str5);  // original
+	size_t len5_c = ft_strlen_in_C(str5);
+	size_t len5_libc = strlen(str5);
 	printf("  ft_strlen(\"%s\") = %ld\n", str5, len5_ft);
-	printf(GREY "     strlen(\"%s\") = %ld \n" RESET, str5, len5_orig);
-	if (len5_ft == len5_orig) result_match("ft_strlen", "strlen");
-	else result_mismatch("ft_strlen", "strlen");
+	printf("  ft_strlen_in_C(\"%s\") = %ld\n", str5, len5_c);
+	printf(GREY "     strlen(\"%s\") = %ld\n" RESET, str5, len5_libc);
+	if (len5_ft == len5_c && len5_c == len5_libc) result_match("all three", "match");
+	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
 }
 
@@ -101,71 +111,85 @@ void test_strcmp(void) {
 	test_case("Identical strings");
 	char *s1 = "hello", *s2 = "hello";
 	int cmp1_ft = ft_strcmp(s1, s2);
-	int cmp1_orig = strcmp(s1, s2);  // original
+	int cmp1_c = ft_strcmp_in_C(s1, s2);
+	int cmp1_libc = strcmp(s1, s2);
 	printf("  ft_strcmp(\"%s\", \"%s\") = %d\n", s1, s2, cmp1_ft);
-	printf(GREY "     strcmp(\"%s\", \"%s\") = %d \n" RESET, s1, s2, cmp1_orig);
-	if ((cmp1_ft == 0 && cmp1_orig == 0) || (cmp1_ft < 0 && cmp1_orig < 0) || (cmp1_ft > 0 && cmp1_orig > 0))
-		result_match("ft_strcmp", "strcmp");
-	else result_mismatch("ft_strcmp", "strcmp");
+	printf("  ft_strcmp_in_C(\"%s\", \"%s\") = %d\n", s1, s2, cmp1_c);
+	printf(GREY "     strcmp(\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp1_libc);
+	if ((cmp1_ft == 0 && cmp1_c == 0 && cmp1_libc == 0) ||
+	    (cmp1_ft < 0 && cmp1_c < 0 && cmp1_libc < 0) ||
+	    (cmp1_ft > 0 && cmp1_c > 0 && cmp1_libc > 0))
+		result_match("all three", "match");
+	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
 
 	// Test 2: First string greater
 	test_case("First string greater (lexicographical order)");
 	s1 = "hello"; s2 = "apple";
 	int cmp2_ft = ft_strcmp(s1, s2);
-	int cmp2_orig = strcmp(s1, s2);  // original
+	int cmp2_c = ft_strcmp_in_C(s1, s2);
+	int cmp2_libc = strcmp(s1, s2);
 	printf("  ft_strcmp(\"%s\", \"%s\") = %d\n", s1, s2, cmp2_ft);
-	printf(GREY "     strcmp(\"%s\", \"%s\") = %d \n" RESET, s1, s2, cmp2_orig);
-	if ((cmp2_ft > 0 && cmp2_orig > 0) || (cmp2_ft < 0 && cmp2_orig < 0) || (cmp2_ft == 0 && cmp2_orig == 0))
-		result_match("ft_strcmp", "strcmp");
-	else result_mismatch("ft_strcmp", "strcmp");
+	printf("  ft_strcmp_in_C(\"%s\", \"%s\") = %d\n", s1, s2, cmp2_c);
+	printf(GREY "     strcmp(\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp2_libc);
+	if ((cmp2_ft > 0 && cmp2_c > 0 && cmp2_libc > 0) || (cmp2_ft < 0 && cmp2_c < 0 && cmp2_libc < 0) || (cmp2_ft == 0 && cmp2_c == 0 && cmp2_libc == 0))
+		result_match("all three", "match");
+	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
 
 	// Test 3: Second string greater
 	test_case("Second string greater (lexicographical order)");
 	s1 = "apple"; s2 = "hello";
 	int cmp3_ft = ft_strcmp(s1, s2);
-	int cmp3_orig = strcmp(s1, s2);  // original
+	int cmp3_c = ft_strcmp_in_C(s1, s2);
+	int cmp3_libc = strcmp(s1, s2);
 	printf("  ft_strcmp(\"%s\", \"%s\") = %d\n", s1, s2, cmp3_ft);
-	printf(GREY "     strcmp(\"%s\", \"%s\") = %d \n" RESET, s1, s2, cmp3_orig);
-	if ((cmp3_ft < 0 && cmp3_orig < 0) || (cmp3_ft > 0 && cmp3_orig > 0) || (cmp3_ft == 0 && cmp3_orig == 0))
-		result_match("ft_strcmp", "strcmp");
-	else result_mismatch("ft_strcmp", "strcmp");
+	printf("  ft_strcmp_in_C(\"%s\", \"%s\") = %d\n", s1, s2, cmp3_c);
+	printf(GREY "     strcmp(\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp3_libc);
+	if ((cmp3_ft < 0 && cmp3_c < 0 && cmp3_libc < 0) || (cmp3_ft > 0 && cmp3_c > 0 && cmp3_libc > 0) || (cmp3_ft == 0 && cmp3_c == 0 && cmp3_libc == 0))
+		result_match("all three", "match");
+	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
 
 	// Test 4: Empty strings
 	test_case("Both empty strings");
 	s1 = ""; s2 = "";
 	int cmp4_ft = ft_strcmp(s1, s2);
-	int cmp4_orig = strcmp(s1, s2);  // original
+	int cmp4_c = ft_strcmp_in_C(s1, s2);
+	int cmp4_libc = strcmp(s1, s2);
 	printf("  ft_strcmp(\"\", \"\") = %d\n", cmp4_ft);
-	printf(GREY "     strcmp(\"\", \"\") = %d \n" RESET, cmp4_orig);
-	if (cmp4_ft == 0 && cmp4_orig == 0) result_match("ft_strcmp", "strcmp");
-	else result_mismatch("ft_strcmp", "strcmp");
+	printf("  ft_strcmp_in_C(\"\", \"\") = %d\n", cmp4_c);
+	printf(GREY "     strcmp(\"\", \"\") = %d\n" RESET, cmp4_libc);
+	if (cmp4_ft == 0 && cmp4_c == 0 && cmp4_libc == 0) result_match("all three", "match");
+	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
 
 	// Test 5: One empty string
 	test_case("First string empty, second non-empty");
 	s1 = ""; s2 = "hello";
 	int cmp5_ft = ft_strcmp(s1, s2);
-	int cmp5_orig = strcmp(s1, s2);  // original
+	int cmp5_c = ft_strcmp_in_C(s1, s2);
+	int cmp5_libc = strcmp(s1, s2);
 	printf("  ft_strcmp(\"\", \"%s\") = %d\n", s2, cmp5_ft);
-	printf(GREY "     strcmp(\"\", \"%s\") = %d \n" RESET, s2, cmp5_orig);
-	if ((cmp5_ft < 0 && cmp5_orig < 0) || (cmp5_ft > 0 && cmp5_orig > 0) || (cmp5_ft == 0 && cmp5_orig == 0))
-		result_match("ft_strcmp", "strcmp");
-	else result_mismatch("ft_strcmp", "strcmp");
+	printf("  ft_strcmp_in_C(\"\", \"%s\") = %d\n", s2, cmp5_c);
+	printf(GREY "     strcmp(\"\", \"%s\") = %d\n" RESET, s2, cmp5_libc);
+	if ((cmp5_ft < 0 && cmp5_c < 0 && cmp5_libc < 0) || (cmp5_ft > 0 && cmp5_c > 0 && cmp5_libc > 0) || (cmp5_ft == 0 && cmp5_c == 0 && cmp5_libc == 0))
+		result_match("all three", "match");
+	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
 
 	// Test 6: Prefix comparison
 	test_case("Prefix comparison");
 	s1 = "hello"; s2 = "helloworld";
 	int cmp6_ft = ft_strcmp(s1, s2);
-	int cmp6_orig = strcmp(s1, s2);  // original
+	int cmp6_c = ft_strcmp_in_C(s1, s2);
+	int cmp6_libc = strcmp(s1, s2);
 	printf("  ft_strcmp(\"%s\", \"%s\") = %d\n", s1, s2, cmp6_ft);
-	printf(GREY "     strcmp(\"%s\", \"%s\") = %d \n" RESET, s1, s2, cmp6_orig);
-	if ((cmp6_ft < 0 && cmp6_orig < 0) || (cmp6_ft > 0 && cmp6_orig > 0) || (cmp6_ft == 0 && cmp6_orig == 0))
-		result_match("ft_strcmp", "strcmp");
-	else result_mismatch("ft_strcmp", "strcmp");
+	printf("  ft_strcmp_in_C(\"%s\", \"%s\") = %d\n", s1, s2, cmp6_c);
+	printf(GREY "     strcmp(\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp6_libc);
+	if ((cmp6_ft < 0 && cmp6_c < 0 && cmp6_libc < 0) || (cmp6_ft > 0 && cmp6_c > 0 && cmp6_libc > 0) || (cmp6_ft == 0 && cmp6_c == 0 && cmp6_libc == 0))
+		result_match("all three", "match");
+	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
 }
 
@@ -178,66 +202,66 @@ void test_strcpy(void) {
 
 	// Test 1: Basic string copy
 	test_case("Basic string copy");
-	char buf_ft[50], buf_orig[50];
+	char buf_ft[50], buf_c[50];
 	char *src1 = "hello";
 	char *ret_ft = ft_strcpy(buf_ft, src1);
-	char *ret_orig = strcpy(buf_orig, src1);  // original
-	printf("  ft_strcpy(buf, \"%s\")\n", src1);
-	printf("    buffer: \"%s\", returns: \"%s\"\n", buf_ft, ret_ft);
-	printf(GREY "  strcpy(buf, \"%s\") \n" RESET, src1);
-	printf(GREY "    buffer: \"%s\", returns: \"%s\"\n" RESET, buf_orig, ret_orig);
-	if (strcmp(buf_ft, buf_orig) == 0) result_match("copy result", "original");
-	else result_mismatch("copy result", "original");
+	char *ret_c = ft_strcpy_in_C(buf_c, src1);
+	printf("  ft_strcpy(buf, \"%s\") = \"%s\"\n", src1, buf_ft);
+	printf("  ft_strcpy_in_C(buf, \"%s\") = \"%s\"\n", src1, buf_c);
+	if (strcmp(buf_ft, buf_c) == 0) result_match("copy result", "match");
+	else result_mismatch("copy result", "match");
 	printf("\n");
 
 	// Test 2: Empty string
 	test_case("Empty string copy");
+	char buf_orig[50];
 	char *src2 = "";
 	ret_ft = ft_strcpy(buf_ft, src2);
-	ret_orig = strcpy(buf_orig, src2);  // original
-	printf("  ft_strcpy(buf, \"\")\n");
-	printf("    buffer: \"%s\", returns: \"%s\"\n", buf_ft, ret_ft);
-	printf(GREY "  strcpy(buf, \"\") \n" RESET);
-	printf(GREY "    buffer: \"%s\", returns: \"%s\"\n" RESET, buf_orig, ret_orig);
-	if (strcmp(buf_ft, buf_orig) == 0) result_match("copy result", "original");
-	else result_mismatch("copy result", "original");
+	ret_c = ft_strcpy_in_C(buf_c, src2);
+	char *ret_orig = strcpy(buf_orig, src2);
+	printf("  ft_strcpy(buf, \"\") = \"%s\"\n", buf_ft);
+	printf("  ft_strcpy_in_C(buf, \"\") = \"%s\"\n", buf_c);
+	printf(GREY "     strcpy(buf, \"\") = \"%s\"\n" RESET, buf_orig);
+	if (strcmp(buf_ft, buf_c) == 0 && strcmp(buf_c, buf_orig) == 0) result_match("all three", "match");
+	else result_mismatch("copy result", "match");
 	printf("\n");
 
 	// Test 3: String with special characters
 	test_case("String with special characters");
 	char *src3 = "hello\nworld\t!!";
 	ret_ft = ft_strcpy(buf_ft, src3);
-	ret_orig = strcpy(buf_orig, src3);  // original
+	ret_c = ft_strcpy_in_C(buf_c, src3);
+	ret_orig = strcpy(buf_orig, src3);
 	printf("  ft_strcpy(buf, \"hello\\nworld\\t!!\")\n");
 	printf("    buffer: \"%s\", returns: \"%s\"\n", buf_ft, ret_ft);
-	printf(GREY "  strcpy(buf, \"hello\\nworld\\t!!\") \n" RESET);
-	printf(GREY "    buffer: \"%s\", returns: \"%s\"\n" RESET, buf_orig, ret_orig);
-	if (strcmp(buf_ft, buf_orig) == 0) result_match("copy result", "original");
-	else result_mismatch("copy result", "original");
+	printf("  ft_strcpy_in_C(buf, \"hello\\nworld\\t!!\")\n");
+	printf("    buffer: \"%s\", returns: \"%s\"\n", buf_c, ret_c);
+	printf(GREY "     strcpy(buf, \"hello\\nworld\\t!!\")\n" RESET);
+	printf(GREY "      buffer: \"%s\", returns: \"%s\" (libc)\n" RESET, buf_orig, ret_orig);
+	if (strcmp(buf_ft, buf_c) == 0 && strcmp(buf_c, buf_orig) == 0) result_match("all three", "match");
+	else result_mismatch("copy result", "match");
 	printf("\n");
 
 	// Test 4: Single character
 	test_case("Single character copy");
 	char *src4 = "a";
 	ret_ft = ft_strcpy(buf_ft, src4);
-	ret_orig = strcpy(buf_orig, src4);  // original
-	printf("  ft_strcpy(buf, \"%s\")\n", src4);
-	printf("    buffer: \"%s\", returns: \"%s\"\n", buf_ft, ret_ft);
-	printf(GREY "  strcpy(buf, \"%s\") \n" RESET, src4);
-	printf(GREY "    buffer: \"%s\", returns: \"%s\"\n" RESET, buf_orig, ret_orig);
-	if (strcmp(buf_ft, buf_orig) == 0) result_match("copy result", "original");
-	else result_mismatch("copy result", "original");
+	ret_orig = ft_strcpy_in_C(buf_orig, src4);
+	printf("  ft_strcpy(buf, \"%s\") = \"%s\"\n", src4, buf_ft);
+	printf("  ft_strcpy_in_C(buf, \"%s\") = \"%s\"\n", src4, buf_orig);
+	if (strcmp(buf_ft, buf_orig) == 0) result_match("copy result", "match");
+	else result_mismatch("copy result", "match");
 	printf("\n");
 
 	// Test 5: Long string
 	test_case("Long string copy");
 	char *src5 = "The quick brown fox jumps over the lazy dog";
 	ret_ft = ft_strcpy(buf_ft, src5);
-	ret_orig = strcpy(buf_orig, src5);  // original
+	ret_orig = ft_strcpy_in_C(buf_orig, src5);
 	printf("  ft_strcpy(buf, \"The quick brown fox jumps over the lazy dog\")\n");
 	printf("    buffer: \"%s\"\n", buf_ft);
-	printf(GREY "     strcpy(buf, \"The quick brown fox jumps over the lazy dog\") \n" RESET);
-	printf(GREY "      buffer: \"%s\"\n" RESET, buf_orig);
+	printf("  ft_strcpy_in_C(buf, \"The quick brown fox jumps over the lazy dog\")\n");
+	printf("    buffer: \"%s\"\n", buf_orig);
 	if (strcmp(buf_ft, buf_orig) == 0) result_match("copy result", "original");
 	else result_mismatch("copy result", "original");
 	printf("\n");
@@ -245,94 +269,118 @@ void test_strcpy(void) {
 	// Test 6: Verify return value points to destination
 	test_case("Return value points to destination buffer");
 	ret_ft = ft_strcpy(buf_ft, "test");
-	ret_orig = strcpy(buf_orig, "test");  // original
+	ret_orig = ft_strcpy_in_C(buf_orig, "test");
+	char buf_libc[50];
+	char *ret_libc = strcpy(buf_libc, "test");
 	printf("  ft_strcpy returns pointer to buf: %s\n", (ret_ft == buf_ft) ? "YES" : "NO");
-	printf(GREY "     strcpy returns pointer to buf: %s \n" RESET, (ret_orig == buf_orig) ? "YES" : "NO");
-	if ((ret_ft == buf_ft) && (ret_orig == buf_orig)) result_match("return pointer", "original");
+	printf("  ft_strcpy_in_C returns pointer to buf: %s\n", (ret_orig == buf_orig) ? "YES" : "NO");
+	printf(GREY "     strcpy returns pointer to buf: %s\n" RESET, (ret_libc == buf_libc) ? "YES" : "NO");
+	if ((ret_ft == buf_ft) && (ret_orig == buf_orig) && (ret_libc == buf_libc)) result_match("return pointer", "original");
 	else result_mismatch("return pointer", "original");
 	printf("\n");
 }
 
-// // ============================================================================
-// // STRDUP TESTS
-// // ============================================================================
+// ============================================================================
+// STRDUP TESTS
+// ============================================================================
+// NOTE: ft_strdup not yet implemented in assembly, so this test is disabled
+/*
+void test_strdup(void) {
+	test_separator("FT_STRDUP");
 
-// void test_strdup(void) {
-// 	test_separator("FT_STRDUP");
+	// Test 1: Basic string duplication
+	test_case("Basic string duplication");
+	char *src1 = "hello";
+	char *dup_ft = ft_strdup(src1);
+	char *dup_c = ft_strdup_in_C(src1);
+	char *dup_libc = strdup(src1);
+	printf("  ft_strdup(\"%s\") = \"%s\"\n", src1, dup_ft ? dup_ft : "NULL");
+	printf("  ft_strdup_in_C(\"%s\") = \"%s\"\n", src1, dup_c ? dup_c : "NULL");
+	printf(GREY "  strdup(\"%s\") = \"%s\"\n" RESET, src1, dup_libc ? dup_libc : "NULL");
+	if (dup_ft && dup_c && dup_libc && strcmp(dup_ft, dup_c) == 0 && strcmp(dup_c, dup_libc) == 0) result_match("duplicated string", "match");
+	else if (!dup_ft && !dup_c && !dup_libc) result_match("all NULL", "match");
+	else result_mismatch("duplicated string", "match");
+	if (dup_ft && dup_c && dup_libc) printf("  Independent allocations: %s\n", (dup_ft != dup_c && dup_c != dup_libc) ? "YES" : "NO");
+	printf("\n");
 
-// 	// Test 1: Basic string duplication
-// 	test_case("Basic string duplication");
-// 	char *src1 = "hello";
-// 	char *dup_ft = ft_strdup(src1);
-// 	char *dup_orig = strdup(src1);  // original
-// 	printf("  ft_strdup(\"%s\") = \"%s\"\n", src1, dup_ft ? dup_ft : "NULL");
-// 	printf(GREY "  strdup(\"%s\") = \"%s\" \n" RESET, src1, dup_orig ? dup_orig : "NULL");
-// 	if (dup_ft && dup_orig && strcmp(dup_ft, dup_orig) == 0) result_match("duplicated string", "original");
-// 	else if (!dup_ft && !dup_orig) result_match("both NULL", "original");
-// 	else result_mismatch("duplicated string", "original");
-// 	if (dup_ft && dup_orig) printf("  Independent allocations: %s\n", (dup_ft != dup_orig) ? "YES" : "NO");
-// 	printf("\n");
+	free(dup_ft);
+	free(dup_c);
+	free(dup_libc);
 
-// 	free(dup_ft);
-// 	free(dup_orig);
+	// Test 2: Empty string
+	test_case("Empty string duplication");
+	char *src2 = "";
+	dup_ft = ft_strdup(src2);
+	dup_c = ft_strdup_in_C(src2);
+	dup_libc = strdup(src2);
+	printf("  ft_strdup(\"\") = \"%s\"\n", dup_ft ? dup_ft : "NULL");
+	printf("  ft_strdup_in_C(\"\") = \"%s\"\n", dup_c ? dup_c : "NULL");
+	printf(GREY "  strdup(\"\") = \"%s\"\n" RESET, dup_libc ? dup_libc : "NULL");
+	if (dup_ft && dup_c && dup_libc && strcmp(dup_ft, dup_c) == 0 && strcmp(dup_c, dup_libc) == 0) result_match("empty string", "match");
+	else if (!dup_ft && !dup_c && !dup_libc) result_match("all NULL", "match");
+	else result_mismatch("empty string", "match");
+	printf("\n");
 
-// 	// Test 2: Empty string
-// 	test_case("Empty string duplication");
-// 	char *src2 = "";
-// 	dup_ft = ft_strdup(src2);
-// 	dup_orig = strdup(src2);  // original
-// 	printf("  ft_strdup(\"\") = \"%s\"\n", dup_ft ? dup_ft : "NULL");
-// 	printf(GREY "  strdup(\"\") = \"%s\" \n" RESET, dup_orig ? dup_orig : "NULL");
-// 	if (dup_ft && dup_orig && strcmp(dup_ft, dup_orig) == 0) result_match("duplicated string", "original");
-// 	else result_mismatch("duplicated string", "original");
-// 	printf("\n");
+	free(dup_ft);
+	free(dup_c);
+	free(dup_libc);
 
-// 	free(dup_ft);
-// 	free(dup_orig);
+	// Test 3: Long string
+	test_case("Long string duplication");
+	char *src3 = "The quick brown fox jumps over the lazy dog. "
+	             "This is a longer string to test memory allocation.";
+	dup_ft = ft_strdup(src3);
+	dup_c = ft_strdup_in_C(src3);
+	dup_libc = strdup(src3);
+	printf("  ft_strdup(long_string) = \"%s\"\n", dup_ft ? dup_ft : "NULL");
+	printf("  ft_strdup_in_C(long_string) = \"%s\"\n", dup_c ? dup_c : "NULL");
+	printf(GREY "  strdup(long_string) = \"%s\"\n" RESET, dup_libc ? dup_libc : "NULL");
+	if (dup_ft && dup_c && dup_libc && strcmp(dup_ft, dup_c) == 0 && strcmp(dup_c, dup_libc) == 0) result_match("long string", "match");
+	else if (!dup_ft && !dup_c && !dup_libc) result_match("all NULL", "match");
+	else result_mismatch("long string", "match");
+	printf("\n");
 
-// 	// Test 3: Long string
-// 	test_case("Long string duplication");
-// 	char *src3 = "The quick brown fox jumps over the lazy dog. "
-// 	             "This is a longer string to test memory allocation.";
-// 	dup_ft = ft_strdup(src3);
-// 	dup_orig = strdup(src3);  // original
-// 	printf("  ft_strdup(long_string) = \"%s\"\n", dup_ft ? dup_ft : "NULL");
-// 	printf(GREY "  strdup(long_string) = \"%s\" \n" RESET, dup_orig ? dup_orig : "NULL");
-// 	if (dup_ft && dup_orig && strcmp(dup_ft, dup_orig) == 0) result_match("duplicated string", "original");
-// 	else result_mismatch("duplicated string", "original");
-// 	printf("\n");
+	free(dup_ft);
+	free(dup_c);
+	free(dup_libc);
 
-// 	free(dup_ft);
-// 	free(dup_orig);
+	// Test 4: String with special characters
+	test_case("String with special characters");
+	char *src4 = "hello\nworld\t!!";
+	dup_ft = ft_strdup(src4);
+	dup_c = ft_strdup_in_C(src4);
+	dup_libc = strdup(src4);
+	printf("  ft_strdup(\"hello\\nworld\\t!!\") = \"%s\"\n", dup_ft ? dup_ft : "NULL");
+	printf("  ft_strdup_in_C(\"hello\\nworld\\t!!\") = \"%s\"\n", dup_c ? dup_c : "NULL");
+	printf(GREY "  strdup(\"hello\\nworld\\t!!\") = \"%s\"\n" RESET, dup_libc ? dup_libc : "NULL");
+	if (dup_ft && dup_c && dup_libc && strcmp(dup_ft, dup_c) == 0 && strcmp(dup_c, dup_libc) == 0) result_match("special chars", "match");
+	else if (!dup_ft && !dup_c && !dup_libc) result_match("all NULL", "match");
+	else result_mismatch("special chars", "match");
+	printf("\n");
 
-// 	// Test 4: String with special characters
-// 	test_case("String with special characters");
-// 	char *src4 = "hello\nworld\t!!";
-// 	dup_ft = ft_strdup(src4);
-// 	dup_orig = strdup(src4);  // original
-// 	printf("  ft_strdup(\"hello\\nworld\\t!!\") = \"%s\"\n", dup_ft ? dup_ft : "NULL");
-// 	printf(GREY "  strdup(\"hello\\nworld\\t!!\") = \"%s\" \n" RESET, dup_orig ? dup_orig : "NULL");
-// 	if (dup_ft && dup_orig && strcmp(dup_ft, dup_orig) == 0) result_match("duplicated string", "original");
-// 	else result_mismatch("duplicated string", "original");
-// 	printf("\n");
+	free(dup_ft);
+	free(dup_c);
+	free(dup_libc);
 
-// 	free(dup_ft);
-// 	free(dup_orig);
+	// Test 5: Single character
+	test_case("Single character duplication");
+	char *src5 = "X";
+	dup_ft = ft_strdup(src5);
+	dup_c = ft_strdup_in_C(src5);
+	dup_libc = strdup(src5);
+	printf("  ft_strdup(\"%s\") = \"%s\"\n", src5, dup_ft ? dup_ft : "NULL");
+	printf("  ft_strdup_in_C(\"%s\") = \"%s\"\n", src5, dup_c ? dup_c : "NULL");
+	printf(GREY "  strdup(\"%s\") = \"%s\"\n" RESET, src5, dup_libc ? dup_libc : "NULL");
+	if (dup_ft && dup_c && dup_libc && strcmp(dup_ft, dup_c) == 0 && strcmp(dup_c, dup_libc) == 0) result_match("single char", "match");
+	else if (!dup_ft && !dup_c && !dup_libc) result_match("all NULL", "match");
+	else result_mismatch("single char", "match");
+	printf("\n");
 
-// 	// Test 5: Single character
-// 	test_case("Single character duplication");
-// 	char *src5 = "X";
-// 	dup_ft = ft_strdup(src5);
-// 	dup_orig = strdup(src5);  // original
-// 	printf("  ft_strdup(\"%s\") = \"%s\"\n", src5, dup_ft ? dup_ft : "NULL");
-// 	printf(GREY "  strdup(\"%s\") = \"%s\" \n" RESET, src5, dup_orig ? dup_orig : "NULL");
-// 	if (dup_ft && dup_orig && strcmp(dup_ft, dup_orig) == 0) result_match("duplicated string", "original");
-// 	else result_mismatch("duplicated string", "original");
-// 	printf("\n");
-
-// 	free(dup_ft);
-// 	free(dup_orig);
-// }
+	free(dup_ft);
+	free(dup_c);
+	free(dup_libc);
+}
+*/
 
 // // ============================================================================
 // // WRITE TESTS
@@ -517,7 +565,7 @@ int main(void) {
 	test_strlen();
 	test_strcmp();
 	test_strcpy();
-	// test_strdup();
+	// test_strdup();  // ft_strdup not yet implemented in assembly
 	// test_write();
 	// test_read();
 

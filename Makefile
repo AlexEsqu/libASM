@@ -23,10 +23,12 @@ INC_DIR = inc
 
 SRCS_C		= 	ft_strlen.c \
 				ft_strcmp.c \
-				ft_strcpy.c
-
-# 			ft_strdup.c \
-			ft_atoi_base.c ft_list_push_front.c ft_list_size.c ft_list_sort.c ft_list_remove_if.c
+				ft_strcpy.c \
+				ft_strdup.c \
+				ft_strlen_in_C.c \
+				ft_strcmp_in_C.c \
+				ft_strcpy_in_C.c \
+				ft_strdup_in_C.c
 
 SRCS_ASM	= 	ft_strlen.s \
 				ft_strcmp.s \
@@ -56,8 +58,8 @@ ASMFLAGS	= -f elf64
 
 all:		$(NAME)
 
-$(NAME):	$(OBJ_DIR_ASM) $(OBJS_ASM)
-			ar rcs $(NAME) $(OBJS_ASM)
+$(NAME):	$(OBJ_DIR_ASM) $(OBJS_ASM) $(OBJ_DIR_C) obj_C/ft_strlen_in_C.o obj_C/ft_strcmp_in_C.o obj_C/ft_strcpy_in_C.o obj_C/ft_strdup_in_C.o
+			ar rcs $(NAME) $(OBJS_ASM) obj_C/ft_strlen_in_C.o obj_C/ft_strcmp_in_C.o obj_C/ft_strcpy_in_C.o obj_C/ft_strdup_in_C.o
 
 clean:
 			rm -f $(OBJS_C) $(OBJS_ASM)
@@ -78,7 +80,6 @@ re:			fclean all
 
 # Compile two executable from main, one with ASM library, one with C library
 test:		$(LIBFT) $(NAME) $(OBJ_DIR_C)
-			$(CC) $(CFLAGS) main.c $(LIBFT) -o libftMain
 			$(CC) $(CFLAGS) main.c $(NAME) -o libasmMain
 
 # Compile code to ASM with intel syntax
