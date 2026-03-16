@@ -211,6 +211,8 @@ set to 1 when interrupt allowed
 
 Generally set at beginning of execution of the program
 
+##### Floating Point Registers (XMM0 - XMM15)
+
 
 ## ASM Syntax
 
@@ -231,8 +233,9 @@ To end program, `INT` interrupt, with `80h` calls exit syscall
 - `layout asm`
 - `run`
 - `stepi` to step to next line
-- `info reigsters <register name>` to examine register content
+- `info registers <register name>` to examine register content
 - `x/x <memory address>` to examine content of a memory address
+- `p $<register>.<type>[0]` such as `p $xmm1.v4_float[0]`
 
 `echo "set disassembly-flavor intel" > ~/.gdbinit` to have intel style layout
 
@@ -308,3 +311,43 @@ Will put remained in EDX
 `JZ`: jump if zero, similar to `JE` since comparison is 0 if equal
 
 `JNZ`: jump if not zero
+
+### Floating Point
+
+`MOVSS`: move instruction scalar single precision
+
+`ADDSS`: add instruction scalar single precision
+
+#### Single Precision
+32-bit floating point number
+
+#### Scalar
+Moving a single decimal value; because register could hold packed data, multiple value moved at the same time
+
+#### Comparison for floating points
+
+`UCOMISS`: comparison with floating point
+
+#### Jumps for floating points
+
+`JB`: jump below, same as less than
+
+`JBE`: jumpe below equal
+
+`JAE`: jump above equal
+
+`JA`: jump above
+
+still use `JE` for jump if equal
+
+## Calling functions
+
+`PUSH` argument on the stack on the order expected by function
+
+`CALL` function defined as extern
+
+**Position Independant Executable**:
+
+`nasm -f elf -o objectfilename.o sourcefile.s`
+
+`gcc -no-pie -m32 objectfile.o <potential C file> -o binaryname`
