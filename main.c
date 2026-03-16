@@ -21,11 +21,13 @@ int main()
 
 	// STRCPY
 
-	// char	buf[42];
-	// char*	ptr;
+	printf("\nSTRCPY\n");
+	char	buf[42];
+	char*	ptr;
 
-	// ptr = ft_strcpy(buf, str);
-	// printf("strcpy prints: [%s]\n", buf);
+	ptr = ft_strcpy(buf, str);
+	printf("strcpy prints into the buffer [%s] and returns [%s]\n", buf, ptr);
+	printf("\n");
 
 	return (0);
 }

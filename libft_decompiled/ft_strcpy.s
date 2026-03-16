@@ -20,15 +20,15 @@ ft_strcpy:                              # @ft_strcpy
 	je	.LBB0_3
 # %bb.2:                                #   in Loop: Header=BB0_1 Depth=1
 	mov	rax, qword ptr [rbp - 16]
-	mov	rcx, rax
-	add	rcx, 1
-	mov	qword ptr [rbp - 16], rcx
 	mov	cl, byte ptr [rax]
 	mov	rax, qword ptr [rbp - 8]
-	mov	rdx, rax
-	add	rdx, 1
-	mov	qword ptr [rbp - 8], rdx
 	mov	byte ptr [rax], cl
+	mov	rax, qword ptr [rbp - 8]
+	add	rax, 1
+	mov	qword ptr [rbp - 8], rax
+	mov	rax, qword ptr [rbp - 16]
+	add	rax, 1
+	mov	qword ptr [rbp - 16], rax
 	jmp	.LBB0_1
 .LBB0_3:
 	mov	rax, qword ptr [rbp - 8]

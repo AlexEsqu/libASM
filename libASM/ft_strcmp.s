@@ -17,7 +17,7 @@ loop:
 	JNE endLoop				; if they are not equal, jump to end loop
 
 	; COMPARE TO END OF STRING
-	; compare if the strings are both over
+	; In case both string are identical, thus reach their end at the same time
 	CMP al, 0				; compare the character in register A to 0 to check if string is over
 	JE endLoop				; if string1 is over, jump to end loop
 

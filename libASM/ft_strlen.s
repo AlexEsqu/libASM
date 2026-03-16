@@ -5,7 +5,7 @@ ft_strlen:
 	; use GCC calling convention to retrieve the arguments given to the function
 	MOV rcx,rdi				; put first argument, start of the string, into register C
 							; Using register C because can be used more freely than B
-							; ie caller saved or volatile, must not be preserved
+							; ie it is caller saved or volatile, and must not be preserved
 
 	; INITIALIZE RESULT
 	; The value returned by RET is the one contained in register A
@@ -16,7 +16,7 @@ loop:
 	JE endLoop				; if character is NULL, jump to end loop
 							; else the program continues linearly
 	INC rax					; increment register A (which contains the length of the word)
-	INC rcx					; increment register C (which contains the current character in the string)
+	INC rcx					; increment register C (which contains the address of the current character in the string)
 
 	JMP loop				; start the loop again
 
