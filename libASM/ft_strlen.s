@@ -12,13 +12,10 @@ ft_strlen:
 	MOV rax,0				; intialize register A to 0
 
 loop:
-	; while (*str)
 	CMP byte [rcx], 0		; compare the byte at memory address in register C to 0 (which is ASCII for NULL)
 	JE endLoop				; if character is NULL, jump to end loop
 							; else the program continues linearly
-	; len ++
 	INC rax					; increment register A (which contains the length of the word)
-	; str ++
 	INC rcx					; increment register C (which contains the current character in the string)
 
 	JMP loop				; start the loop again

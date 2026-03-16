@@ -1,6 +1,9 @@
 global ft_strcmp
 
 ft_strcmp:
+	; PRESERVE NON VOLATILE REGISTERS
+	PUSH rbp
+
 	; GET ARGUMENTS
 	; use GCC calling convention to retrieve the arguments given to the function
 	; in x86-64, non floats arguments are put into rdi, rsi, rdx, rcx, r8, r9, then the stack
@@ -10,12 +13,12 @@ ft_strcmp:
 loop:
 	; COMPARE
 	; can only compare if at least one value is held in a register
-	MOV rax, qword [rcx]	; moves value of current character of string1 into register A
-
-	CMP rax, qword [rdx]	; compare the character in register A and the one pointed to by register D
+	MOV al, byte [rcx]		; moves value of current character of string1 into subset of register A
+	MOV bl, byte [rdx]		; moves value of current character of string2 into subset of register B
+	CMP al,bl				; compare the character in register A and the one pointed to by register D
 	JNE endLoop				; if they are not equal, jump to end loop
 
-	CMP rax, 0				; compare the character in register A to 0 to check if string is over
+	CMP al, 0				; compare the character in register A to 0 to check if string is over
 	JE endLoop				; if string1 is over, jump to end loop
 
 	INC rcx					; increment register A which contains current address in string1
@@ -23,7 +26,11 @@ loop:
 	JMP loop				; start the loop again
 
 endLoop:
-	SUB rax, qword [rdx]	; subtract value of character pointed to by register D from register A
+	SUB al, bl				; subtract value of character pointed to by register D from register A
+	MOVSX rax,al
+
+	; RETRIEVE NON VOLATILE
+	POP rbp
 	RET						; returns the value in register A
 
 ; to avoid annoying linker error, specifying the executable risks of the function

@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../inc/libft.h"
 
 // Returns the size in characters of a character string
 size_t ft_strlen(const char* str)

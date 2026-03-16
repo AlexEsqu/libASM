@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../inc/libft.h"
 
 // Returns the value difference between the first different characters in a character string
 int ft_strcmp(const char *s1, const char *s2)
