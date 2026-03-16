@@ -4,12 +4,13 @@
 // responsible for allocating a destination buffer large enough, that is, strlen(src) + 1.
 char *ft_strcpy(char *restrict dst, const char *restrict src)
 {
+	char* curr = dst;
 	while (*src)
 	{
-		*dst = *src;
-		dst++;
+		*curr = *src;
+		curr++;
 		src++;
 	}
-	*dst = '\0';
+	*curr = '\0';
 	return dst;
 }

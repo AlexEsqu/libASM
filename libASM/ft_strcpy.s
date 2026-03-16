@@ -19,7 +19,7 @@ loop:
 	JMP loop				; continue loop
 
 endLoop:
-	MOV rax,rcx
+	MOV rax,rdi				; put address of start of the destination string into register A
 	RET						; end the function
 
 ; to avoid annoying linker error, specifying the executable risks of the function
