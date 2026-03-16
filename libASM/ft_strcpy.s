@@ -8,17 +8,23 @@ ft_strcpy:
 	MOV rdx,rsi				; place pointer to source string in register C
 
 loop:
+	; STORE CURRENT CHARACTER
 	MOV al, byte [rdx]		; Put the current source string character into a subset of register A
+
+	; COMPARE TO 0
 	CMP al,0				; Check if current character is NULL
 	JE endLoop				; if so quit loop
 
+	; COPY INTO DESTINATION
 	MOV byte [rcx],al		; Put the subset of register A into the current destination character
+
 	INC rdx					; increment pointer to source string
 	INC rcx					; increment pointer to destination string
 
 	JMP loop				; continue loop
 
 endLoop:
+	MOV byte [rcx],al
 	MOV rax,rdi				; put address of start of the destination string into register A
 	RET						; end the function
 

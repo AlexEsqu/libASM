@@ -236,8 +236,8 @@ void test_strcpy(void) {
 	ret_orig = strcpy(buf_orig, src5);  // original
 	printf("  ft_strcpy(buf, \"The quick brown fox jumps over the lazy dog\")\n");
 	printf("    buffer: \"%s\"\n", buf_ft);
-	printf(GREY "  strcpy(buf, \"The quick brown fox jumps over the lazy dog\") \n" RESET);
-	printf(GREY "    buffer: \"%s\"\n" RESET, buf_orig);
+	printf(GREY "     strcpy(buf, \"The quick brown fox jumps over the lazy dog\") \n" RESET);
+	printf(GREY "      buffer: \"%s\"\n" RESET, buf_orig);
 	if (strcmp(buf_ft, buf_orig) == 0) result_match("copy result", "original");
 	else result_mismatch("copy result", "original");
 	printf("\n");
@@ -247,7 +247,7 @@ void test_strcpy(void) {
 	ret_ft = ft_strcpy(buf_ft, "test");
 	ret_orig = strcpy(buf_orig, "test");  // original
 	printf("  ft_strcpy returns pointer to buf: %s\n", (ret_ft == buf_ft) ? "YES" : "NO");
-	printf(GREY "  strcpy returns pointer to buf: %s \n" RESET, (ret_orig == buf_orig) ? "YES" : "NO");
+	printf(GREY "     strcpy returns pointer to buf: %s \n" RESET, (ret_orig == buf_orig) ? "YES" : "NO");
 	if ((ret_ft == buf_ft) && (ret_orig == buf_orig)) result_match("return pointer", "original");
 	else result_mismatch("return pointer", "original");
 	printf("\n");

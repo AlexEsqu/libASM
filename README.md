@@ -88,7 +88,7 @@ For backward compatibility reasons, writing to EAX, EBX, ECX or EDX will zero ou
 
 #### 1. RAX : **Accumulator**
 
-Automatically used for multiplication and division
+Automatically used for multiplication and division and return values
 
 ```
 RAX : 0000 0000 0000 0000 0000 0000 0000 0000

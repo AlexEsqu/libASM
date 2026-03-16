@@ -11,14 +11,14 @@ ft_strlen:
 	; The value returned by RET is the one contained in register A
 	MOV rax,0				; intialize register A to 0
 
-loop:
+count_char:
 	CMP byte [rcx], 0		; compare the byte at memory address in register C to 0 (which is ASCII for NULL)
 	JE endLoop				; if character is NULL, jump to end loop
 							; else the program continues linearly
 	INC rax					; increment register A (which contains the length of the word)
 	INC rcx					; increment register C (which contains the address of the current character in the string)
 
-	JMP loop				; start the loop again
+	JMP count_char				; start the loop again
 
 endLoop:
 	RET						; returns the value in register A
