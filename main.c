@@ -1,12 +1,17 @@
-#include "libft/libft.h"
+#include "inc/libft.h"
 #include <stdio.h>
 
 int main()
 {
 	// STRLEN
 
-	char* str = "hellooo0";
+	char* str = "hello";
 	printf("%s is of length %ld\n", str, ft_strlen(str));
+
+	// STRCMP
+
+	char* str2 = "hello";
+	printf("%s and %s are of difference %d\n", str, str2, ft_strcmp(str, str2));
 
 	// // // STRCPY
 

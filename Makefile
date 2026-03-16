@@ -26,7 +26,7 @@ SRCS_C	= ft_strlen.c ft_strcpy.c ft_strcmp.c
 # 			ft_strdup.c \
 			ft_atoi_base.c ft_list_push_front.c ft_list_size.c ft_list_sort.c ft_list_remove_if.c
 
-SRCS_ASM	= ft_strlen.s
+SRCS_ASM	= ft_strlen.s ft_strcmp.s
 
 # 			ft_strlen.s ft_strspy.s ft_strsmp.s ft_write.s ft_read.s ft_strdup.s \
 			ft_atoi_base.s ft_list_push_front.s ft_list_size.s ft_list_sort.s ft_list_remove_if.s
