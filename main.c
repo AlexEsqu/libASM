@@ -39,9 +39,9 @@ void test_strlen(void) {
 	size_t len1_ft = ft_strlen(str1);
 	size_t len1_c = ft_strlen_in_C(str1);
 	size_t len1_libc = strlen(str1);
-	printf("  ft_strlen in ASM  (\"%s\") = %ld\n", str1, len1_ft);
-	printf(GREY "  ft_strlen in C    (\"%s\") = %ld\n" RESET, str1, len1_c);
-	printf(GREY "     strlen in libc (\"%s\") = %ld\n" RESET, str1, len1_libc);
+	printf("  ft_strlen in libASM (\"%s\") = %ld\n", str1, len1_ft);
+	printf(GREY "  ft_strlen in libft  (\"%s\") = %ld\n" RESET, str1, len1_c);
+	printf(GREY "     strlen in libc   (\"%s\") = %ld\n" RESET, str1, len1_libc);
 	if (len1_ft == len1_c && len1_c == len1_libc) result_match("all three", "match");
 	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
@@ -52,9 +52,9 @@ void test_strlen(void) {
 	size_t len2_ft = ft_strlen(str2);
 	size_t len2_c = ft_strlen_in_C(str2);
 	size_t len2_libc = strlen(str2);
-	printf("  ft_strlen(\"%s\") = %ld\n", str2, len2_ft);
-	printf("  ft_strlen_in_C(\"%s\") = %ld\n", str2, len2_c);
-	printf(GREY "     strlen(\"%s\") = %ld\n" RESET, str2, len2_libc);
+	printf("  ft_strlen in libASM (\"%s\") = %ld\n", str2, len2_ft);
+	printf(GREY "  ft_strlen in libft  (\"%s\") = %ld\n" RESET, str2, len2_c);
+	printf(GREY "     strlen in libc   (\"%s\") = %ld\n" RESET, str2, len2_libc);
 	if (len2_ft == len2_c && len2_c == len2_libc) result_match("all three", "match");
 	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
@@ -65,9 +65,9 @@ void test_strlen(void) {
 	size_t len3_ft = ft_strlen(str3);
 	size_t len3_c = ft_strlen_in_C(str3);
 	size_t len3_libc = strlen(str3);
-	printf("  ft_strlen(\"%s\") = %ld\n", str3, len3_ft);
-	printf("  ft_strlen_in_C(\"%s\") = %ld\n", str3, len3_c);
-	printf(GREY "     strlen(\"%s\") = %ld\n" RESET, str3, len3_libc);
+	printf("  ft_strlen in libASM (\"hello\\nworld\\t!!\") = %ld\n", len3_ft);
+	printf(GREY "  ft_strlen in libft  (\"hello\\nworld\\t!!\") = %ld\n" RESET, len3_c);
+	printf(GREY "     strlen in libc   (\"hello\\nworld\\t!!\") = %ld\n" RESET, len3_libc);
 	if (len3_ft == len3_c && len3_c == len3_libc) result_match("all three", "match");
 	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
@@ -79,9 +79,9 @@ void test_strlen(void) {
 	size_t len4_ft = ft_strlen(str4);
 	size_t len4_c = ft_strlen_in_C(str4);
 	size_t len4_libc = strlen(str4);
-	printf("  ft_strlen(...) = %ld\n", len4_ft);
-	printf("  ft_strlen_in_C(...) = %ld\n", len4_c);
-	printf(GREY "     strlen(...) = %ld\n" RESET, len4_libc);
+	printf("  ft_strlen in libASM (...) = %ld\n", len4_ft);
+	printf(GREY "  ft_strlen in libft  (...) = %ld\n" RESET, len4_c);
+	printf(GREY "     strlen in libc   (...) = %ld\n" RESET, len4_libc);
 	if (len4_ft == len4_c && len4_c == len4_libc) result_match("all three", "match");
 	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
@@ -92,9 +92,9 @@ void test_strlen(void) {
 	size_t len5_ft = ft_strlen(str5);
 	size_t len5_c = ft_strlen_in_C(str5);
 	size_t len5_libc = strlen(str5);
-	printf("  ft_strlen(\"%s\") = %ld\n", str5, len5_ft);
-	printf("  ft_strlen_in_C(\"%s\") = %ld\n", str5, len5_c);
-	printf(GREY "     strlen(\"%s\") = %ld\n" RESET, str5, len5_libc);
+	printf("  ft_strlen in libASM (\"%s\") = %ld\n", str5, len5_ft);
+	printf(GREY "  ft_strlen in libft  (\"%s\") = %ld\n" RESET, str5, len5_c);
+	printf(GREY "     strlen in libc   (\"%s\") = %ld\n" RESET, str5, len5_libc);
 	if (len5_ft == len5_c && len5_c == len5_libc) result_match("all three", "match");
 	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
@@ -113,9 +113,9 @@ void test_strcmp(void) {
 	int cmp1_ft = ft_strcmp(s1, s2);
 	int cmp1_c = ft_strcmp_in_C(s1, s2);
 	int cmp1_libc = strcmp(s1, s2);
-	printf("  ft_strcmp(\"%s\", \"%s\") = %d\n", s1, s2, cmp1_ft);
-	printf("  ft_strcmp_in_C(\"%s\", \"%s\") = %d\n", s1, s2, cmp1_c);
-	printf(GREY "     strcmp(\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp1_libc);
+	printf("  ft_strcmp in libASM (\"%s\", \"%s\") = %d\n", s1, s2, cmp1_ft);
+	printf(GREY "  ft_strcmp in libft  (\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp1_c);
+	printf(GREY "     strcmp in libc   (\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp1_libc);
 	if ((cmp1_ft == 0 && cmp1_c == 0 && cmp1_libc == 0) ||
 	    (cmp1_ft < 0 && cmp1_c < 0 && cmp1_libc < 0) ||
 	    (cmp1_ft > 0 && cmp1_c > 0 && cmp1_libc > 0))
@@ -129,9 +129,9 @@ void test_strcmp(void) {
 	int cmp2_ft = ft_strcmp(s1, s2);
 	int cmp2_c = ft_strcmp_in_C(s1, s2);
 	int cmp2_libc = strcmp(s1, s2);
-	printf("  ft_strcmp(\"%s\", \"%s\") = %d\n", s1, s2, cmp2_ft);
-	printf("  ft_strcmp_in_C(\"%s\", \"%s\") = %d\n", s1, s2, cmp2_c);
-	printf(GREY "     strcmp(\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp2_libc);
+	printf("  ft_strcmp in libASM (\"%s\", \"%s\") = %d\n", s1, s2, cmp2_ft);
+	printf(GREY "  ft_strcmp in libft  (\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp2_c);
+	printf(GREY "     strcmp in libc   (\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp2_libc);
 	if ((cmp2_ft > 0 && cmp2_c > 0 && cmp2_libc > 0) || (cmp2_ft < 0 && cmp2_c < 0 && cmp2_libc < 0) || (cmp2_ft == 0 && cmp2_c == 0 && cmp2_libc == 0))
 		result_match("all three", "match");
 	else result_mismatch("assembly/C/libc", "match");
@@ -143,9 +143,9 @@ void test_strcmp(void) {
 	int cmp3_ft = ft_strcmp(s1, s2);
 	int cmp3_c = ft_strcmp_in_C(s1, s2);
 	int cmp3_libc = strcmp(s1, s2);
-	printf("  ft_strcmp(\"%s\", \"%s\") = %d\n", s1, s2, cmp3_ft);
-	printf("  ft_strcmp_in_C(\"%s\", \"%s\") = %d\n", s1, s2, cmp3_c);
-	printf(GREY "     strcmp(\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp3_libc);
+	printf("  ft_strcmp in libASM (\"%s\", \"%s\") = %d\n", s1, s2, cmp3_ft);
+	printf(GREY "  ft_strcmp in libft  (\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp3_c);
+	printf(GREY "     strcmp in libc   (\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp3_libc);
 	if ((cmp3_ft < 0 && cmp3_c < 0 && cmp3_libc < 0) || (cmp3_ft > 0 && cmp3_c > 0 && cmp3_libc > 0) || (cmp3_ft == 0 && cmp3_c == 0 && cmp3_libc == 0))
 		result_match("all three", "match");
 	else result_mismatch("assembly/C/libc", "match");
@@ -157,9 +157,9 @@ void test_strcmp(void) {
 	int cmp4_ft = ft_strcmp(s1, s2);
 	int cmp4_c = ft_strcmp_in_C(s1, s2);
 	int cmp4_libc = strcmp(s1, s2);
-	printf("  ft_strcmp(\"\", \"\") = %d\n", cmp4_ft);
-	printf("  ft_strcmp_in_C(\"\", \"\") = %d\n", cmp4_c);
-	printf(GREY "     strcmp(\"\", \"\") = %d\n" RESET, cmp4_libc);
+	printf("  ft_strcmp in libASM (\"\", \"\") = %d\n", cmp4_ft);
+	printf(GREY "  ft_strcmp in libft  (\"\", \"\") = %d\n" RESET, cmp4_c);
+	printf(GREY "     strcmp in libc   (\"\", \"\") = %d\n" RESET, cmp4_libc);
 	if (cmp4_ft == 0 && cmp4_c == 0 && cmp4_libc == 0) result_match("all three", "match");
 	else result_mismatch("assembly/C/libc", "match");
 	printf("\n");
@@ -170,9 +170,9 @@ void test_strcmp(void) {
 	int cmp5_ft = ft_strcmp(s1, s2);
 	int cmp5_c = ft_strcmp_in_C(s1, s2);
 	int cmp5_libc = strcmp(s1, s2);
-	printf("  ft_strcmp(\"\", \"%s\") = %d\n", s2, cmp5_ft);
-	printf("  ft_strcmp_in_C(\"\", \"%s\") = %d\n", s2, cmp5_c);
-	printf(GREY "     strcmp(\"\", \"%s\") = %d\n" RESET, s2, cmp5_libc);
+	printf("  ft_strcmp in libASM (\"\", \"%s\") = %d\n", s2, cmp5_ft);
+	printf(GREY "  ft_strcmp in libft  (\"\", \"%s\") = %d\n" RESET, s2, cmp5_c);
+	printf(GREY "     strcmp in libc   (\"\", \"%s\") = %d\n" RESET, s2, cmp5_libc);
 	if ((cmp5_ft < 0 && cmp5_c < 0 && cmp5_libc < 0) || (cmp5_ft > 0 && cmp5_c > 0 && cmp5_libc > 0) || (cmp5_ft == 0 && cmp5_c == 0 && cmp5_libc == 0))
 		result_match("all three", "match");
 	else result_mismatch("assembly/C/libc", "match");
@@ -184,9 +184,9 @@ void test_strcmp(void) {
 	int cmp6_ft = ft_strcmp(s1, s2);
 	int cmp6_c = ft_strcmp_in_C(s1, s2);
 	int cmp6_libc = strcmp(s1, s2);
-	printf("  ft_strcmp(\"%s\", \"%s\") = %d\n", s1, s2, cmp6_ft);
-	printf("  ft_strcmp_in_C(\"%s\", \"%s\") = %d\n", s1, s2, cmp6_c);
-	printf(GREY "     strcmp(\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp6_libc);
+	printf("  ft_strcmp in libASM (\"%s\", \"%s\") = %d\n", s1, s2, cmp6_ft);
+	printf(GREY "  ft_strcmp in libft  (\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp6_c);
+	printf(GREY "     strcmp in libc   (\"%s\", \"%s\") = %d\n" RESET, s1, s2, cmp6_libc);
 	if ((cmp6_ft < 0 && cmp6_c < 0 && cmp6_libc < 0) || (cmp6_ft > 0 && cmp6_c > 0 && cmp6_libc > 0) || (cmp6_ft == 0 && cmp6_c == 0 && cmp6_libc == 0))
 		result_match("all three", "match");
 	else result_mismatch("assembly/C/libc", "match");
@@ -202,12 +202,14 @@ void test_strcpy(void) {
 
 	// Test 1: Basic string copy
 	test_case("Basic string copy");
-	char buf_ft[50], buf_c[50];
+	char buf_ft[50], buf_c[50], buf_libc[50];
 	char *src1 = "hello";
 	char *ret_ft = ft_strcpy(buf_ft, src1);
 	char *ret_c = ft_strcpy_in_C(buf_c, src1);
-	printf("  ft_strcpy(buf, \"%s\") = \"%s\"\n", src1, buf_ft);
-	printf("  ft_strcpy_in_C(buf, \"%s\") = \"%s\"\n", src1, buf_c);
+	char *ret_libc = strcpy(buf_libc, src1);
+	printf("  ft_strcpy in libASM (buf, \"%s\") = \"%s\"\n", src1, buf_ft);
+	printf(GREY "  ft_strcpy in libft  (buf, \"%s\") = \"%s\"\n" RESET, src1, buf_c);
+	printf(GREY "     strcpy in libc   (buf, \"%s\") = \"%s\"\n" RESET, src1, buf_libc);
 	if (strcmp(buf_ft, buf_c) == 0) result_match("copy result", "match");
 	else result_mismatch("copy result", "match");
 	printf("\n");
@@ -219,9 +221,9 @@ void test_strcpy(void) {
 	ret_ft = ft_strcpy(buf_ft, src2);
 	ret_c = ft_strcpy_in_C(buf_c, src2);
 	char *ret_orig = strcpy(buf_orig, src2);
-	printf("  ft_strcpy(buf, \"\") = \"%s\"\n", buf_ft);
-	printf("  ft_strcpy_in_C(buf, \"\") = \"%s\"\n", buf_c);
-	printf(GREY "     strcpy(buf, \"\") = \"%s\"\n" RESET, buf_orig);
+	printf("  ft_strcpy in libASM (buf, \"\") = \"%s\"\n", buf_ft);
+	printf(GREY "  ft_strcpy in libft  (buf, \"\") = \"%s\"\n" RESET, buf_c);
+	printf(GREY "     strcpy in libc   (buf, \"\") = \"%s\"\n" RESET, buf_orig);
 	if (strcmp(buf_ft, buf_c) == 0 && strcmp(buf_c, buf_orig) == 0) result_match("all three", "match");
 	else result_mismatch("copy result", "match");
 	printf("\n");
@@ -232,12 +234,9 @@ void test_strcpy(void) {
 	ret_ft = ft_strcpy(buf_ft, src3);
 	ret_c = ft_strcpy_in_C(buf_c, src3);
 	ret_orig = strcpy(buf_orig, src3);
-	printf("  ft_strcpy(buf, \"hello\\nworld\\t!!\")\n");
-	printf("    buffer: \"%s\", returns: \"%s\"\n", buf_ft, ret_ft);
-	printf("  ft_strcpy_in_C(buf, \"hello\\nworld\\t!!\")\n");
-	printf("    buffer: \"%s\", returns: \"%s\"\n", buf_c, ret_c);
-	printf(GREY "     strcpy(buf, \"hello\\nworld\\t!!\")\n" RESET);
-	printf(GREY "      buffer: \"%s\", returns: \"%s\" (libc)\n" RESET, buf_orig, ret_orig);
+	printf("  ft_strcpy in libASM (buf, \"hello\\nworld\\t!!\") = \"%s\"\n", buf_ft);
+	printf(GREY "  ft_strcpy in libft  (buf, \"hello\\nworld\\t!!\") = \"%s\"\n" RESET, buf_c);
+	printf(GREY "     strcpy in libc   (buf, \"hello\\nworld\\t!!\") = \"%s\"\n" RESET, buf_orig);
 	if (strcmp(buf_ft, buf_c) == 0 && strcmp(buf_c, buf_orig) == 0) result_match("all three", "match");
 	else result_mismatch("copy result", "match");
 	printf("\n");
@@ -246,8 +245,11 @@ void test_strcpy(void) {
 	test_case("Single character copy");
 	char *src4 = "a";
 	ret_ft = ft_strcpy(buf_ft, src4);
-	ret_orig = ft_strcpy_in_C(buf_orig, src4);
-	printf("  ft_strcpy(buf, \"%s\") = \"%s\"\n", src4, buf_ft);
+	ret_c = ft_strcpy_in_C(buf_c, src4);
+	ret_orig = strcpy(buf_orig, src4);
+	printf("  ft_strcpy in libASM (buf, \"%s\") = \"%s\"\n", src4, buf_ft);
+	printf(GREY "  ft_strcpy in libft  (buf, \"%s\") = \"%s\"\n" RESET, src4, buf_c);
+	printf(GREY "     strcpy in libc   (buf, \"%s\") = \"%s\"\n" RESET, src4, buf_orig);
 	printf("  ft_strcpy_in_C(buf, \"%s\") = \"%s\"\n", src4, buf_orig);
 	if (strcmp(buf_ft, buf_orig) == 0) result_match("copy result", "match");
 	else result_mismatch("copy result", "match");
@@ -257,11 +259,11 @@ void test_strcpy(void) {
 	test_case("Long string copy");
 	char *src5 = "The quick brown fox jumps over the lazy dog";
 	ret_ft = ft_strcpy(buf_ft, src5);
-	ret_orig = ft_strcpy_in_C(buf_orig, src5);
-	printf("  ft_strcpy(buf, \"The quick brown fox jumps over the lazy dog\")\n");
-	printf("    buffer: \"%s\"\n", buf_ft);
-	printf("  ft_strcpy_in_C(buf, \"The quick brown fox jumps over the lazy dog\")\n");
-	printf("    buffer: \"%s\"\n", buf_orig);
+	ret_c = ft_strcpy_in_C(buf_c, src5);
+	ret_orig = strcpy(buf_orig, src5);
+	printf("  ft_strcpy in libASM (buf, \"...\") = \"%s\"\n", buf_ft);
+	printf(GREY "  ft_strcpy in libft  (buf, \"...\") = \"%s\"\n" RESET, buf_c);
+	printf(GREY "     strcpy in libc   (buf, \"...\") = \"%s\"\n" RESET, buf_orig);
 	if (strcmp(buf_ft, buf_orig) == 0) result_match("copy result", "original");
 	else result_mismatch("copy result", "original");
 	printf("\n");
@@ -269,12 +271,11 @@ void test_strcpy(void) {
 	// Test 6: Verify return value points to destination
 	test_case("Return value points to destination buffer");
 	ret_ft = ft_strcpy(buf_ft, "test");
-	ret_orig = ft_strcpy_in_C(buf_orig, "test");
-	char buf_libc[50];
-	char *ret_libc = strcpy(buf_libc, "test");
-	printf("  ft_strcpy returns pointer to buf: %s\n", (ret_ft == buf_ft) ? "YES" : "NO");
-	printf("  ft_strcpy_in_C returns pointer to buf: %s\n", (ret_orig == buf_orig) ? "YES" : "NO");
-	printf(GREY "     strcpy returns pointer to buf: %s\n" RESET, (ret_libc == buf_libc) ? "YES" : "NO");
+	ret_c = ft_strcpy_in_C(buf_c, "test");
+	ret_orig = strcpy(buf_orig, "test");
+	printf("  ft_strcpy in libASM returns pointer to buf: %s\n", (ret_ft == buf_ft) ? "YES" : "NO");
+	printf(GREY "  ft_strcpy in libft  returns pointer to buf: %s\n" RESET, (ret_c == buf_c) ? "YES" : "NO");
+	printf(GREY "     strcpy in libc   returns pointer to buf: %s\n" RESET, (ret_orig == buf_orig) ? "YES" : "NO");
 	if ((ret_ft == buf_ft) && (ret_orig == buf_orig) && (ret_libc == buf_libc)) result_match("return pointer", "original");
 	else result_mismatch("return pointer", "original");
 	printf("\n");
