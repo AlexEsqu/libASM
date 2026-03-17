@@ -10,3 +10,6 @@ ft_read:
 
 	MOV rax,0	; set the syscall code for sys_read
 	SYSCALL		; call syscall using the arguments set into register A, D, SI and DI
+
+; to avoid annoying linker error, specifying the executable risks of the function
+section .note.GNU-stack noalloc noexec nowrite progbits

@@ -14,7 +14,7 @@ OBJ_DIR_C = obj_C
 
 OBJ_DIR_ASM = obj_ASM
 
-LIBFT_ASM_DIR = libft_decompiled
+LIBFT_ASM_DIR = libft_deassembled
 
 INC_DIR = inc
 
@@ -24,11 +24,13 @@ INC_DIR = inc
 SRCS_C		= 	ft_strlen_in_C.c \
 				ft_strcmp_in_C.c \
 				ft_strcpy_in_C.c \
-				ft_strdup_in_C.c
+				ft_strdup_in_C.c \
+				ft_read_in_C.c
 
 SRCS_ASM	= 	ft_strlen.s \
 				ft_strcmp.s \
-				ft_strcpy.s
+				ft_strcpy.s \
+				ft_read.s
 
 # 			ft_strlen.s ft_strspy.s ft_strsmp.s ft_write.s ft_read.s ft_strdup.s \
 			ft_atoi_base.s ft_list_push_front.s ft_list_size.s ft_list_sort.s ft_list_remove_if.s

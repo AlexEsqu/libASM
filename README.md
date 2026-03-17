@@ -351,3 +351,22 @@ still use `JE` for jump if equal
 `nasm -f elf -o objectfilename.o sourcefile.s`
 
 `gcc -no-pie -m32 objectfile.o <potential C file> -o binaryname`
+
+## Calling Syscall
+
+Syscalls are made by setting the required registers to specific values to pick the syscall, and set its arguments, such as:
+
+%rax	System call	%rdi	%rsi	%rdx	%r10	%r8	%r9
+0	sys_read	unsigned int fd	char *buf	size_t count
+1	sys_write	unsigned int fd	const char *buf	size_t count
+2	sys_open	const char *filename	int flags	int mode
+3	sys_close	unsigned int fd
+4	sys_stat	const char *filename	struct stat *statbuf
+5	sys_fstat	unsigned int fd	struct stat *statbuf
+6	sys_lstat	fconst char *filename	struct stat *statbuf
+7	sys_poll	struct poll_fd *ufds	unsigned int nfds	long timeout_msecs
+8	sys_lseek	unsigned int fd	off_t offset	unsigned int origin
+9	sys_mmap	unsigned long addr	unsigned long len	unsigned long prot	unsigned long flags	unsigned long fd	unsigned long off
+
+### Set arguments
+
