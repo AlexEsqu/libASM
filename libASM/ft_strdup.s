@@ -8,6 +8,8 @@ ft_strdup:
 	; GET ARGUMENTS
 	; use GCC calling convention stating non float arguments are stored in rdi, rsi, rdx, rcx, r8, r9, then the stack
 	PUSH rbx		; store the value of register B, and free it up to use it ourselves
+					; since I call other functions which may make use of my registers,
+					; and this value need to stay the same, I use a non volatile register
 	MOV rbx,rdi		; ARG 1 - put char pointer of originalString into register B
 
 	; GET STRING LENGTH
@@ -29,7 +31,7 @@ ft_strdup:
 	CALL ft_strcpy
 
 					; register A already contains destination string which needs to be returned
-	POP rbx	
+	POP rbx			; retrieve the original value of register B
 	RET
 
 
