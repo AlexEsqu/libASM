@@ -295,9 +295,12 @@ void test_strdup(void) {
 	printf("  ft_strdup(\"%s\") = \"%s\"\n", src1, dup_ft ? dup_ft : "NULL");
 	printf("  ft_strdup_in_C(\"%s\") = \"%s\"\n", src1, dup_c ? dup_c : "NULL");
 	printf(GREY "  strdup(\"%s\") = \"%s\"\n" RESET, src1, dup_libc ? dup_libc : "NULL");
-	if (dup_ft && dup_c && dup_libc && strcmp(dup_ft, dup_c) == 0 && strcmp(dup_c, dup_libc) == 0) result_match("duplicated string", "match");
-	else if (!dup_ft && !dup_c && !dup_libc) result_match("all NULL", "match");
-	else result_mismatch("duplicated string", "match");
+	if (dup_ft && dup_c && dup_libc)
+		result_match_str(dup_ft, dup_c, dup_libc);
+	else if (!dup_ft && !dup_c && !dup_libc)
+		result_match();
+	else
+		result_mismatch("duplicated string", "original");
 	if (dup_ft && dup_c && dup_libc) printf("  Independent allocations: %s\n", (dup_ft != dup_c && dup_c != dup_libc) ? "YES" : "NO");
 	printf("\n");
 
@@ -313,9 +316,12 @@ void test_strdup(void) {
 	printf("  ft_strdup(\"\") = \"%s\"\n", dup_ft ? dup_ft : "NULL");
 	printf("  ft_strdup_in_C(\"\") = \"%s\"\n", dup_c ? dup_c : "NULL");
 	printf(GREY "  strdup(\"\") = \"%s\"\n" RESET, dup_libc ? dup_libc : "NULL");
-	if (dup_ft && dup_c && dup_libc && strcmp(dup_ft, dup_c) == 0 && strcmp(dup_c, dup_libc) == 0) result_match("empty string", "match");
-	else if (!dup_ft && !dup_c && !dup_libc) result_match("all NULL", "match");
-	else result_mismatch("empty string", "match");
+	if (dup_ft && dup_c && dup_libc)
+		result_match_str(dup_ft, dup_c, dup_libc);
+	else if (!dup_ft && !dup_c && !dup_libc)
+		result_match();
+	else
+		result_mismatch("empty string", "original");
 	printf("\n");
 
 	free(dup_ft);
@@ -331,9 +337,12 @@ void test_strdup(void) {
 	printf("  ft_strdup(long_string) = \"%s\"\n", dup_ft ? dup_ft : "NULL");
 	printf("  ft_strdup_in_C(long_string) = \"%s\"\n", dup_c ? dup_c : "NULL");
 	printf(GREY "  strdup(long_string) = \"%s\"\n" RESET, dup_libc ? dup_libc : "NULL");
-	if (dup_ft && dup_c && dup_libc && strcmp(dup_ft, dup_c) == 0 && strcmp(dup_c, dup_libc) == 0) result_match("long string", "match");
-	else if (!dup_ft && !dup_c && !dup_libc) result_match("all NULL", "match");
-	else result_mismatch("long string", "match");
+	if (dup_ft && dup_c && dup_libc)
+		result_match_str(dup_ft, dup_c, dup_libc);
+	else if (!dup_ft && !dup_c && !dup_libc)
+		result_match();
+	else
+		result_mismatch("long string", "original");
 	printf("\n");
 
 	free(dup_ft);
@@ -348,9 +357,12 @@ void test_strdup(void) {
 	printf("  ft_strdup(\"hello\\nworld\\t!!\") = \"%s\"\n", dup_ft ? dup_ft : "NULL");
 	printf("  ft_strdup_in_C(\"hello\\nworld\\t!!\") = \"%s\"\n", dup_c ? dup_c : "NULL");
 	printf(GREY "  strdup(\"hello\\nworld\\t!!\") = \"%s\"\n" RESET, dup_libc ? dup_libc : "NULL");
-	if (dup_ft && dup_c && dup_libc && strcmp(dup_ft, dup_c) == 0 && strcmp(dup_c, dup_libc) == 0) result_match("special chars", "match");
-	else if (!dup_ft && !dup_c && !dup_libc) result_match("all NULL", "match");
-	else result_mismatch("special chars", "match");
+	if (dup_ft && dup_c && dup_libc)
+		result_match_str(dup_ft, dup_c, dup_libc);
+	else if (!dup_ft && !dup_c && !dup_libc)
+		result_match();
+	else
+		result_mismatch("special chars", "original");
 	printf("\n");
 
 	free(dup_ft);
@@ -365,9 +377,12 @@ void test_strdup(void) {
 	printf("  ft_strdup(\"%s\") = \"%s\"\n", src5, dup_ft ? dup_ft : "NULL");
 	printf("  ft_strdup_in_C(\"%s\") = \"%s\"\n", src5, dup_c ? dup_c : "NULL");
 	printf(GREY "  strdup(\"%s\") = \"%s\"\n" RESET, src5, dup_libc ? dup_libc : "NULL");
-	if (dup_ft && dup_c && dup_libc && strcmp(dup_ft, dup_c) == 0 && strcmp(dup_c, dup_libc) == 0) result_match("single char", "match");
-	else if (!dup_ft && !dup_c && !dup_libc) result_match("all NULL", "match");
-	else result_mismatch("single char", "match");
+	if (dup_ft && dup_c && dup_libc)
+		result_match_str(dup_ft, dup_c, dup_libc);
+	else if (!dup_ft && !dup_c && !dup_libc)
+		result_match();
+	else
+		result_mismatch("single char", "original");
 	printf("\n");
 
 	free(dup_ft);
