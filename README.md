@@ -346,6 +346,8 @@ still use `JE` for jump if equal
 
 `CALL` function defined as extern
 
+Beware, other functions will make use of volatile registers, so store any important data in non volatile ones
+
 **Position Independant Executable**:
 
 `nasm -f elf -o objectfilename.o sourcefile.s`
@@ -374,4 +376,3 @@ Syscalls are made by setting the required registers to specific values to pick t
 `extern __errno_location`
 
 `CALL __errno_location wrt ..plt`
-
