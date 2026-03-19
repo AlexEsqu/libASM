@@ -1,7 +1,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "../inc/libft.h"
+#include "../../inc/libft.h"
 
 int main(void) {
     // Setup test file

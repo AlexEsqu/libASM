@@ -1,6 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
-#include "../inc/libft.h"
+#include "../../inc/libft.h"
 
 int main(void) {
     char *src = "The quick brown fox jumps over the lazy dog";

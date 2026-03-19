@@ -1,7 +1,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "../inc/libft.h"
+#include "../../inc/libft.h"
 
 int main(void) {
     char *msg = "The quick brown fox jumps over the lazy dog\n";

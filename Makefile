@@ -40,7 +40,9 @@ SRCS_ASM	= 	ft_strlen.s \
 				ft_write.s \
 				ft_strdup.s
 
-SRCS_TEST	=	tests/libasm_unit_test.c
+SRCS_TEST	=	tests/unit_test.c
+
+SRCS_MAIN	=	tests/main.c
 
 SRCS_BENCH	=	tests/libasm_benchmark.c
 
@@ -98,8 +100,8 @@ re:			fclean all
 #####################################
 
 # Compile library with main
-main:		$(NAME) $(LIBFT)
-			$(CC) $(CFLAGS) main.c $(LIBFT) $(NAME) -o $(MAIN)
+main:		$(NAME) $(LIBFT) $(SRCS_MAIN)
+			$(CC) $(CFLAGS) $(SRCS_MAIN) $(LIBFT) $(NAME) -o $(MAIN)
 
 # Compile library with unit tests
 unit_test:	$(NAME) $(LIBFT) $(SRCS_TEST)

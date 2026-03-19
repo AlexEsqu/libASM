@@ -9,5 +9,5 @@ libft_deassembled
 main
 test*
 !tests/
-benchmarks/build
+tests/benchmarks/build
 .vscode

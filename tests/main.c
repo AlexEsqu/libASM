@@ -1,4 +1,4 @@
-#include "inc/libft.h"
+#include "../inc/libft.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -17,6 +17,7 @@
 void test_separator(const char *title) {
 	printf("\n" BOLD "=== %s ===" RESET "\n\n", title);
 }
+
 
 void test_case(const char *description) {
 	printf(BOLD "TEST: " RESET "%s\n", description);
