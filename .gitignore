@@ -2,8 +2,12 @@ a.out
 obj*
 *.a
 *.o
-libftMain
-libasmMain
-libft_ASM
-text_input.txt
-test_*
+libft_compiled_to_asm
+unit_test
+benchmark
+libft_deassembled
+main
+test*
+!tests/
+benchmarks/build
+.vscode

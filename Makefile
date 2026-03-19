@@ -4,6 +4,9 @@ NAME	= libasm.a
 # Library in C for comparison
 LIBFT	= libft.a
 
+# Main for tests
+MAIN	= main
+
 
 # Directories
 SRC_DIR_C = libft
@@ -14,19 +17,21 @@ OBJ_DIR_C = obj_C
 
 OBJ_DIR_ASM = obj_ASM
 
-LIBFT_ASM_DIR = libft_deassembled
+OBJ_DIR_TEST = obj_tests
+
+LIBFT_ASM_DIR = libft_compiled_to_asm
 
 INC_DIR = inc
 
 
 # Files
 
-SRCS_C		= 	ft_strlen_in_C.c \
-				ft_strcmp_in_C.c \
-				ft_strcpy_in_C.c \
-				ft_strdup_in_C.c \
-				ft_read_in_C.c \
-				ft_write_in_C.c
+SRCS_C		= 	ft_strlen.c \
+				ft_strcmp.c \
+				ft_strcpy.c \
+				ft_strdup.c \
+				ft_read.c \
+				ft_write.c
 
 SRCS_ASM	= 	ft_strlen.s \
 				ft_strcmp.s \
@@ -34,6 +39,10 @@ SRCS_ASM	= 	ft_strlen.s \
 				ft_read.s \
 				ft_write.s \
 				ft_strdup.s
+
+SRCS_TEST	=	tests/libasm_unit_test.c
+
+SRCS_BENCH	=	tests/libasm_benchmark.c
 
 # 			ft_strlen.s ft_strspy.s ft_strsmp.s ft_write.s ft_read.s ft_strdup.s \
 			ft_atoi_base.s ft_list_push_front.s ft_list_size.s ft_list_sort.s ft_list_remove_if.s
@@ -50,6 +59,11 @@ CFLAGS		= -Wall -Wextra -Werror
 DEBUGFLAG	= -g
 ASMGENFLAG	= -S -mllvm --x86-asm-syntax=intel
 ASMFLAGS	= -f elf64
+TESTFLAGS	= -L.. -lasm -lft -lcriterion
+
+PKG_CONFIG	= pkg-config
+CRIT_CFLAGS	= $(shell $(PKG_CONFIG) --cflags criterion 2>/dev/null || echo "-I/usr/include")
+CRIT_LDFLAGS	= $(shell $(PKG_CONFIG) --libs criterion 2>/dev/null || echo "-lcriterion")
 
 #####################################
 #									#
@@ -59,13 +73,17 @@ ASMFLAGS	= -f elf64
 
 all:		$(NAME)
 
-$(NAME):	$(OBJ_DIR_ASM) $(OBJS_ASM) $(OBJ_DIR_C) obj_C/ft_strlen_in_C.o obj_C/ft_strcmp_in_C.o obj_C/ft_strcpy_in_C.o obj_C/ft_strdup_in_C.o
-			ar rcs $(NAME) $(OBJS_ASM) obj_C/ft_strlen_in_C.o obj_C/ft_strcmp_in_C.o obj_C/ft_strcpy_in_C.o obj_C/ft_strdup_in_C.o
+$(NAME):	$(OBJ_DIR_ASM) $(OBJS_ASM)
+			ar rcs $(NAME) $(OBJS_ASM)
 
 clean:
 			rm -f $(OBJS_C) $(OBJS_ASM)
-			rm -rf $(OBJ_DIR)
-			rm -rf $(LIBFT_ASM_DIR)
+			rm -rf $(OBJ_DIR_ASM)
+			rm -rf $(OBJ_DIR_C)
+			rm -rf $(MAIN)
+			rm -rf libft_deassembled
+			rm -rf benchmark
+			rm -rf unit_test
 
 fclean:		clean
 			rm -f $(LIBFT) $(NAME)
@@ -79,12 +97,22 @@ re:			fclean all
 #									#
 #####################################
 
-# Compile two executable from main, one with ASM library, one with C library
-test:		$(LIBFT) $(NAME) $(OBJ_DIR_C)
-			$(CC) $(CFLAGS) main.c $(NAME) -o libasmMain
+# Compile library with main
+main:		$(NAME) $(LIBFT)
+			$(CC) $(CFLAGS) main.c $(LIBFT) $(NAME) -o $(MAIN)
 
-# Compile code to ASM with intel syntax
-generate:	$(patsubst %.c,$(LIBFT_ASM_DIR)/%.s,$(SRCS_C))
+# Compile library with unit tests
+unit_test:	$(NAME) $(LIBFT) $(SRCS_TEST)
+			gcc $(CFLAGS) $(CRIT_CFLAGS) -I$(INC_DIR) $(SRCS_TEST) -o $@ -L. -lasm -lft $(CRIT_LDFLAGS)
+			./unit_test --verbose
+
+# Compile library with unit tests
+benchmark:	$(NAME) $(LIBFT) $(SRCS_BENCH)
+			gcc $(CRIT_CFLAGS) -I$(INC_DIR) tests/libasm_benchmark.c -o benchmark -L. -lasm -lft $(CRIT_LDFLAGS)
+			./benchmark
+
+# Decompile C code into assembler
+decompile:	$(patsubst %.c,$(LIBFT_ASM_DIR)/%.s,$(SRCS_C))
 
 
 #####################################
@@ -98,7 +126,7 @@ $(LIBFT):	$(OBJ_DIR_C) $(OBJS_C)
 			ar rcs $(LIBFT) $(OBJS_C)
 
 $(OBJ_DIR_C)/%.o: $(SRC_DIR_C)/%.c
-				$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
+			$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
 
 $(OBJ_DIR_ASM)/%.o: $(SRC_DIR_ASM)/%.s
 				$(ASM) $(ASMFLAGS) $< -o $@
@@ -113,6 +141,4 @@ $(LIBFT_ASM_DIR)/%.s:	$(SRC_DIR_C)/%.c
 						mkdir -p $(LIBFT_ASM_DIR)
 						$(CC) $(CFLAGS) $(ASMGENFLAG) $< -o $@
 
-
-
-.PHONY:		all clean fclean re test generate
+.PHONY:		all clean fclean re test decompile

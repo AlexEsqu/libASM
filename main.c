@@ -292,9 +292,9 @@ void test_strdup(void) {
 	char *dup_ft = ft_strdup(src1);
 	char *dup_c = ft_strdup_in_C(src1);
 	char *dup_libc = strdup(src1);
-	printf("  ft_strdup(\"%s\") = \"%s\"\n", src1, dup_ft ? dup_ft : "NULL");
-	printf("  ft_strdup_in_C(\"%s\") = \"%s\"\n", src1, dup_c ? dup_c : "NULL");
-	printf(GREY "  strdup(\"%s\") = \"%s\"\n" RESET, src1, dup_libc ? dup_libc : "NULL");
+	printf("  ft_strdup in libasm : (\"%s\") = \"%s\"\n", src1, dup_ft ? dup_ft : "NULL");
+	printf(GREY "  ft_strdup in libft :  (\"%s\") = \"%s\"\n" RESET, src1, dup_c ? dup_c : "NULL");
+	printf(GREY "     strdup in libc :   (\"%s\") = \"%s\"\n" RESET, src1, dup_libc ? dup_libc : "NULL");
 	if (dup_ft && dup_c && dup_libc)
 		result_match_str(dup_ft, dup_c, dup_libc);
 	else if (!dup_ft && !dup_c && !dup_libc)
@@ -313,15 +313,16 @@ void test_strdup(void) {
 	dup_ft = ft_strdup(src2);
 	dup_c = ft_strdup_in_C(src2);
 	dup_libc = strdup(src2);
-	printf("  ft_strdup(\"\") = \"%s\"\n", dup_ft ? dup_ft : "NULL");
-	printf("  ft_strdup_in_C(\"\") = \"%s\"\n", dup_c ? dup_c : "NULL");
-	printf(GREY "  strdup(\"\") = \"%s\"\n" RESET, dup_libc ? dup_libc : "NULL");
+	printf("  ft_strdup in libasm : (\"%s\") = \"%s\"\n", src2, dup_ft ? dup_ft : "NULL");
+	printf(GREY "  ft_strdup in libft :  (\"%s\") = \"%s\"\n" RESET, src2, dup_c ? dup_c : "NULL");
+	printf(GREY "     strdup in libc :   (\"%s\") = \"%s\"\n" RESET, src2, dup_libc ? dup_libc : "NULL");
 	if (dup_ft && dup_c && dup_libc)
 		result_match_str(dup_ft, dup_c, dup_libc);
 	else if (!dup_ft && !dup_c && !dup_libc)
 		result_match();
 	else
-		result_mismatch("empty string", "original");
+		result_mismatch("duplicated string", "original");
+	if (dup_ft && dup_c && dup_libc) printf("  Independent allocations: %s\n", (dup_ft != dup_c && dup_c != dup_libc) ? "YES" : "NO");
 	printf("\n");
 
 	free(dup_ft);
@@ -334,15 +335,16 @@ void test_strdup(void) {
 	dup_ft = ft_strdup(src3);
 	dup_c = ft_strdup_in_C(src3);
 	dup_libc = strdup(src3);
-	printf("  ft_strdup(long_string) = \"%s\"\n", dup_ft ? dup_ft : "NULL");
-	printf("  ft_strdup_in_C(long_string) = \"%s\"\n", dup_c ? dup_c : "NULL");
-	printf(GREY "  strdup(long_string) = \"%s\"\n" RESET, dup_libc ? dup_libc : "NULL");
+	printf("  ft_strdup in libasm : (...) = \"%s\"\n", dup_ft ? dup_ft : "NULL");
+	printf(GREY "  ft_strdup in libft :  (...) = \"%s\"\n" RESET, dup_c ? dup_c : "NULL");
+	printf(GREY "     strdup in libc :   (...) = \"%s\"\n" RESET, dup_libc ? dup_libc : "NULL");
 	if (dup_ft && dup_c && dup_libc)
 		result_match_str(dup_ft, dup_c, dup_libc);
 	else if (!dup_ft && !dup_c && !dup_libc)
 		result_match();
 	else
-		result_mismatch("long string", "original");
+		result_mismatch("duplicated string", "original");
+	if (dup_ft && dup_c && dup_libc) printf("  Independent allocations: %s\n", (dup_ft != dup_c && dup_c != dup_libc) ? "YES" : "NO");
 	printf("\n");
 
 	free(dup_ft);
@@ -354,15 +356,16 @@ void test_strdup(void) {
 	dup_ft = ft_strdup(src4);
 	dup_c = ft_strdup_in_C(src4);
 	dup_libc = strdup(src4);
-	printf("  ft_strdup(\"hello\\nworld\\t!!\") = \"%s\"\n", dup_ft ? dup_ft : "NULL");
-	printf("  ft_strdup_in_C(\"hello\\nworld\\t!!\") = \"%s\"\n", dup_c ? dup_c : "NULL");
-	printf(GREY "  strdup(\"hello\\nworld\\t!!\") = \"%s\"\n" RESET, dup_libc ? dup_libc : "NULL");
+	printf("  ft_strdup in libasm : (\"hello\\nworld\\t!!\") = \"%s\"\n", dup_ft ? dup_ft : "NULL");
+	printf(GREY "  ft_strdup in libft :  (\"hello\\nworld\\t!!\") = \"%s\"\n" RESET, dup_c ? dup_c : "NULL");
+	printf(GREY "     strdup in libc :   (\"hello\\nworld\\t!!\") = \"%s\"\n" RESET, dup_libc ? dup_libc : "NULL");
 	if (dup_ft && dup_c && dup_libc)
 		result_match_str(dup_ft, dup_c, dup_libc);
 	else if (!dup_ft && !dup_c && !dup_libc)
 		result_match();
 	else
-		result_mismatch("special chars", "original");
+		result_mismatch("duplicated string", "original");
+	if (dup_ft && dup_c && dup_libc) printf("  Independent allocations: %s\n", (dup_ft != dup_c && dup_c != dup_libc) ? "YES" : "NO");
 	printf("\n");
 
 	free(dup_ft);
@@ -374,15 +377,16 @@ void test_strdup(void) {
 	dup_ft = ft_strdup(src5);
 	dup_c = ft_strdup_in_C(src5);
 	dup_libc = strdup(src5);
-	printf("  ft_strdup(\"%s\") = \"%s\"\n", src5, dup_ft ? dup_ft : "NULL");
-	printf("  ft_strdup_in_C(\"%s\") = \"%s\"\n", src5, dup_c ? dup_c : "NULL");
-	printf(GREY "  strdup(\"%s\") = \"%s\"\n" RESET, src5, dup_libc ? dup_libc : "NULL");
+	printf("  ft_strdup in libasm : (\"%s\") = \"%s\"\n", src5, dup_ft ? dup_ft : "NULL");
+	printf(GREY "  ft_strdup in libft :  (\"%s\") = \"%s\"\n" RESET, src5, dup_c ? dup_c : "NULL");
+	printf(GREY "     strdup in libc :   (\"%s\") = \"%s\"\n" RESET, src5, dup_libc ? dup_libc : "NULL");
 	if (dup_ft && dup_c && dup_libc)
 		result_match_str(dup_ft, dup_c, dup_libc);
 	else if (!dup_ft && !dup_c && !dup_libc)
 		result_match();
 	else
-		result_mismatch("single char", "original");
+		result_mismatch("duplicated string", "original");
+	if (dup_ft && dup_c && dup_libc) printf("  Independent allocations: %s\n", (dup_ft != dup_c && dup_c != dup_libc) ? "YES" : "NO");
 	printf("\n");
 
 	free(dup_ft);
@@ -404,7 +408,7 @@ void test_write(void) {
 	ssize_t ret_orig = write(1, msg1, strlen(msg1));
 	printf(GREY "\n" RESET);
 	printf("  ft_write in libASM (1, \"%s\", %lu) = %ld\n", msg1, strlen(msg1), ret_ft);
-	printf(GREY "  write in libc       (1, \"%s\", %lu) = %ld\n" RESET, msg1, strlen(msg1), ret_orig);
+	printf(GREY "  write in libc      (1, \"%s\", %lu) = %ld\n" RESET, msg1, strlen(msg1), ret_orig);
 	if (ret_ft == ret_orig) result_match();
 	else result_mismatch("bytes written", "original");
 
@@ -415,7 +419,7 @@ void test_write(void) {
 	ret_orig = write(1, msg2, 5);
 	printf("\n");
 	printf("  ft_write in libASM (1, \"%s\", 5) = %ld\n", msg2, ret_ft);
-	printf(GREY "  write in libc       (1, \"%s\", 5) = %ld\n" RESET, msg2, ret_orig);
+	printf(GREY "  write in libc      (1, \"%s\", 5) = %ld\n" RESET, msg2, ret_orig);
 	if (ret_ft == ret_orig) result_match();
 	else result_mismatch("bytes written", "original");
 
@@ -423,7 +427,7 @@ void test_write(void) {
 	ret_ft = ft_write(1, "data", 0);
 	ret_orig = write(1, "data", 0);
 	printf("  ft_write in libASM (1, \"data\", 0) = %ld\n", ret_ft);
-	printf(GREY "  write in libc       (1, \"data\", 0) = %ld\n" RESET, ret_orig);
+	printf(GREY "  write in libc      (1, \"data\", 0) = %ld\n" RESET, ret_orig);
 	if (ret_ft == ret_orig) result_match();
 	else result_mismatch("bytes written", "original");
 
@@ -439,7 +443,7 @@ void test_write(void) {
 		close(fd);
 
 		printf("  ft_write in libASM (fd, \"%s\", %lu) = %ld\n", msg4, strlen(msg4), ret_ft);
-		printf(GREY "  write in libc       (fd, \"%s\", %lu) = %ld\n" RESET, msg4, strlen(msg4), ret_orig);
+		printf(GREY "  write in libc      (fd, \"%s\", %lu) = %ld\n" RESET, msg4, strlen(msg4), ret_orig);
 		if (ret_ft == ret_orig) result_match();
 		else result_mismatch("bytes written", "original");
 	} else {
@@ -452,7 +456,7 @@ void test_write(void) {
 	ret_orig = write(2, msg5, strlen(msg5));
 	printf(GREY "\n" RESET);
 	printf("  ft_write in libASM (2, \"%s\", %lu) = %ld\n", msg5, strlen(msg5), ret_ft);
-	printf(GREY "  write in libc       (2, \"%s\", %lu) = %ld\n" RESET, msg5, strlen(msg5), ret_orig);
+	printf(GREY "  write in libc      (2, \"%s\", %lu) = %ld\n" RESET, msg5, strlen(msg5), ret_orig);
 	if (ret_ft == ret_orig) result_match();
 	else result_mismatch("bytes written", "original");
 
@@ -466,7 +470,7 @@ void test_write(void) {
 	int libc_errno = errno;
 
 	printf("  ft_write in libASM (-1, \"test\", 4) = %ld, errno=%d\n", ret_ft, asm_errno);
-	printf(GREY "     write in libc       (-1, \"test\", 4) = %ld, errno=%d\n" RESET, ret_orig, libc_errno);
+	printf(GREY "     write in libc (-1, \"test\", 4)   = %ld, errno=%d\n" RESET, ret_orig, libc_errno);
 	result_match_errno(asm_errno, libc_errno);
 
 	test_case("Write with invalid file descriptor (closed fd) (errno check)");
@@ -483,7 +487,7 @@ void test_write(void) {
 	libc_errno = errno;
 
 	printf("  ft_write in libASM (closed_fd, \"test\", 4) = %ld, errno=%d\n", ret_ft, asm_errno);
-	printf(GREY "     write in libc       (closed_fd, \"test\", 4) = %ld, errno=%d\n" RESET, ret_orig, libc_errno);
+	printf(GREY "     write in libc (closed_fd, \"test\", 4)   = %ld, errno=%d\n" RESET, ret_orig, libc_errno);
 	result_match_errno(asm_errno, libc_errno);
 
 	test_case("Write to directory instead of file (EISDIR errno check)");
@@ -496,7 +500,7 @@ void test_write(void) {
 	libc_errno = errno;
 
 	printf("  ft_write in libASM (dirfd, \"test\", 4) = %ld, errno=%d (EISDIR=%d)\n", ret_ft, asm_errno, EISDIR);
-	printf(GREY "     write in libc       (dirfd, \"test\", 4) = %ld, errno=%d (EISDIR=%d)\n" RESET, ret_orig, libc_errno, EISDIR);
+	printf(GREY "     write in libc (dirfd, \"test\", 4)   = %ld, errno=%d (EISDIR=%d)\n" RESET, ret_orig, libc_errno, EISDIR);
 	result_match_errno(asm_errno, libc_errno);
 
 	test_case("Write to read-only file (EACCES errno check)");
@@ -517,7 +521,7 @@ void test_write(void) {
 		if (ro_fd != -1) close(ro_fd);
 
 		printf("  ft_write in libASM (ro_file, \"test\", 4) = %ld, errno=%d (EACCES=%d)\n", ret_ft, asm_errno, EACCES);
-		printf(GREY "     write in libc       (ro_file, \"test\", 4) = %ld, errno=%d (EACCES=%d)\n" RESET, ret_orig, libc_errno, EACCES);
+		printf(GREY "     write in libc (ro_file, \"test\", 4)   = %ld, errno=%d (EACCES=%d)\n" RESET, ret_orig, libc_errno, EACCES);
 		result_match_errno(asm_errno, libc_errno);
 
 		// Restore file permissions for cleanup
