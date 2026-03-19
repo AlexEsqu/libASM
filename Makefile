@@ -31,14 +31,16 @@ SRCS_C		= 	ft_strlen.c \
 				ft_strcpy.c \
 				ft_strdup.c \
 				ft_read.c \
-				ft_write.c
+				ft_write.c \
+				ft_atoi_base.c
 
 SRCS_ASM	= 	ft_strlen.s \
 				ft_strcmp.s \
 				ft_strcpy.s \
 				ft_read.s \
 				ft_write.s \
-				ft_strdup.s
+				ft_strdup.s \
+				ft_atoi_base.s
 
 SRCS_TEST	=	tests/unit_test.c
 
@@ -54,7 +56,7 @@ OBJS_ASM	= $(patsubst %.s,$(OBJ_DIR_ASM)/%.o,$(SRCS_ASM))
 
 
 # Compilation options
-CC		= clang
+CC		= clang -g
 ASM		= nasm
 
 CFLAGS		= -Wall -Wextra -Werror
