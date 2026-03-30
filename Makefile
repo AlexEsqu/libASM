@@ -59,7 +59,7 @@ ASM		= nasm
 
 CFLAGS		= -Wall -Wextra -Werror -fno-builtin
 DEBUGFLAG	= -g
-ASMGENFLAG	= -S -mllvm --x86-asm-syntax=intel
+DISASMFLAG	= -S -mllvm --x86-asm-syntax=intel
 ASMFLAGS	= -f elf64
 TESTFLAGS	= -L.. -lasm -lft -lcriterion
 
@@ -114,7 +114,7 @@ benchmark:	$(NAME) $(LIBFT) $(SRCS_BENCH)
 			./tests/benchmarks/run_benchmarks.sh
 
 # Decompile C code into assembler
-deassemble:	$(patsubst %.c,$(LIBFT_ASM_DIR)/%.s,$(SRCS_C))
+deassemble:	$(addprefix $(SRC_DIR_C)/, $(SRCS_C)) $(patsubst %.c,$(LIBFT_ASM_DIR)/%.s,$(SRCS_C))
 
 
 #####################################
@@ -141,6 +141,6 @@ $(OBJ_DIR_C):
 
 $(LIBFT_ASM_DIR)/%.s:	$(SRC_DIR_C)/%.c
 			mkdir -p $(LIBFT_ASM_DIR)
-			$(CC) $(CFLAGS) $(ASMGENFLAG) $< -o $@
+			$(CC) $(CFLAGS) $(DISASMFLAG) $< -o $@
 
-.PHONY:		all clean fclean re test deassemble
+.PHONY:		all clean fclean re unit_test deassemble
