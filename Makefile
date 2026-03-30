@@ -19,7 +19,7 @@ OBJ_DIR_ASM = obj_ASM
 
 OBJ_DIR_TEST = obj_tests
 
-LIBFT_ASM_DIR = libft_compiled_to_asm
+LIBFT_ASM_DIR = libft_disassembled
 
 INC_DIR = inc
 
@@ -46,20 +46,18 @@ SRCS_TEST	=	tests/unit_test.c
 
 SRCS_MAIN	=	tests/main.c
 
-SRCS_BENCH	=	tests/libasm_benchmark.c
-
-# 			ft_strlen.s ft_strspy.s ft_strsmp.s ft_write.s ft_read.s ft_strdup.s \
-			ft_atoi_base.s ft_list_push_front.s ft_list_size.s ft_list_sort.s ft_list_remove_if.s
+SRCS_BENCH	=	tests/benchmarks/run_benchmarks.sh
 
 OBJS_C		= $(patsubst %.c,$(OBJ_DIR_C)/%.o,$(SRCS_C))
 OBJS_ASM	= $(patsubst %.s,$(OBJ_DIR_ASM)/%.o,$(SRCS_ASM))
 
 
 # Compilation options
-CC		= clang -g
+CC		= clang
+GCC 	= gcc
 ASM		= nasm
 
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -fno-builtin
 DEBUGFLAG	= -g
 ASMGENFLAG	= -S -mllvm --x86-asm-syntax=intel
 ASMFLAGS	= -f elf64
@@ -84,8 +82,9 @@ clean:
 			rm -f $(OBJS_C) $(OBJS_ASM)
 			rm -rf $(OBJ_DIR_ASM)
 			rm -rf $(OBJ_DIR_C)
+			rm -rf $(OBJ_DIR_TEST)
 			rm -rf $(MAIN)
-			rm -rf libft_deassembled
+			rm -rf $(LIBFT_ASM_DIR)
 			rm -rf benchmark
 			rm -rf unit_test
 
@@ -107,16 +106,15 @@ main:		$(NAME) $(LIBFT) $(SRCS_MAIN)
 
 # Compile library with unit tests
 unit_test:	$(NAME) $(LIBFT) $(SRCS_TEST)
-			gcc $(CFLAGS) $(CRIT_CFLAGS) -I$(INC_DIR) $(SRCS_TEST) -o $@ -L. -lasm -lft $(CRIT_LDFLAGS)
+			$(GCC) $(DEBUGFLAG) $(CFLAGS) $(CRIT_CFLAGS) -I$(INC_DIR) $(SRCS_TEST) -o $@ -L. -lasm -lft $(CRIT_LDFLAGS)
 			./unit_test --verbose
 
-# Compile library with unit tests
+# Compile library with benchmarks
 benchmark:	$(NAME) $(LIBFT) $(SRCS_BENCH)
-			gcc $(CRIT_CFLAGS) -I$(INC_DIR) tests/libasm_benchmark.c -o benchmark -L. -lasm -lft $(CRIT_LDFLAGS)
-			./benchmark
+			./tests/benchmarks/run_benchmarks.sh
 
 # Decompile C code into assembler
-decompile:	$(patsubst %.c,$(LIBFT_ASM_DIR)/%.s,$(SRCS_C))
+deassemble:	$(patsubst %.c,$(LIBFT_ASM_DIR)/%.s,$(SRCS_C))
 
 
 #####################################
@@ -130,19 +128,19 @@ $(LIBFT):	$(OBJ_DIR_C) $(OBJS_C)
 			ar rcs $(LIBFT) $(OBJS_C)
 
 $(OBJ_DIR_C)/%.o: $(SRC_DIR_C)/%.c
-			$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
+			$(CC) $(CFLAGS) -o3 -I$(INC_DIR) -c $< -o $@
 
 $(OBJ_DIR_ASM)/%.o: $(SRC_DIR_ASM)/%.s
-				$(ASM) $(ASMFLAGS) $< -o $@
+			$(ASM) $(ASMFLAGS) $< -o $@
 
 $(OBJ_DIR_ASM):
-				mkdir -p $@
+			mkdir -p $@
 
 $(OBJ_DIR_C):
-				mkdir -p $@
+			mkdir -p $@
 
 $(LIBFT_ASM_DIR)/%.s:	$(SRC_DIR_C)/%.c
-						mkdir -p $(LIBFT_ASM_DIR)
-						$(CC) $(CFLAGS) $(ASMGENFLAG) $< -o $@
+			mkdir -p $(LIBFT_ASM_DIR)
+			$(CC) $(CFLAGS) $(ASMGENFLAG) $< -o $@
 
-.PHONY:		all clean fclean re test decompile
+.PHONY:		all clean fclean re test deassemble
