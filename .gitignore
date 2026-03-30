@@ -2,10 +2,9 @@ a.out
 obj*
 *.a
 *.o
-libft_compiled_to_asm
 unit_test
 benchmark
-libft_deassembled
+libft_disassembled
 main
 test*
 !tests/

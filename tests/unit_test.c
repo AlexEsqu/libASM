@@ -68,14 +68,6 @@ Test(ft_strlen, single_character) {
 	cr_assert_eq(len_ft, len_libc, "ft_strlen should match libc strlen");
 }
 
-Test(ft_strlen, benchmark) {
-	char *str = "The quick brown fox jumps over the lazy dog";
-	for (int i = 0; i < 10000; i++) {
-		ft_strlen(str);
-	}
-	cr_assert(1, "Benchmark completed");
-}
-
 // ============================================================================
 // FT_STRCMP TESTS
 // ============================================================================
@@ -158,15 +150,6 @@ Test(ft_strcmp, prefix_comparison) {
 		"ft_strcmp should match libc strcmp sign");
 }
 
-Test(ft_strcmp, benchmark) {
-	char *s1 = "The quick brown fox";
-	char *s2 = "The quick brown fox";
-	for (int i = 0; i < 10000; i++) {
-		ft_strcmp(s1, s2);
-	}
-	cr_assert(1, "Benchmark completed");
-}
-
 // ============================================================================
 // FT_STRCPY TESTS
 // ============================================================================
@@ -243,15 +226,6 @@ Test(ft_strcpy, return_value) {
 	cr_assert_eq(ret_ft, buf_ft, "ft_strcpy should return pointer to destination");
 	cr_assert_eq(ret_c, buf_c, "ft_strcpy_in_C should return pointer to destination");
 	cr_assert_eq(ret_libc, buf_libc, "libc strcpy should return pointer to destination");
-}
-
-Test(ft_strcpy, benchmark) {
-	char buf[100];
-	char *src = "The quick brown fox jumps over the lazy dog";
-	for (int i = 0; i < 5000; i++) {
-		ft_strcpy(buf, src);
-	}
-	cr_assert(1, "Benchmark completed");
 }
 
 // ============================================================================
@@ -355,15 +329,6 @@ Test(ft_strdup, single_character) {
 	free(dup_libc);
 }
 
-Test(ft_strdup, benchmark) {
-	char *src = "The quick brown fox jumps over the lazy dog";
-	for (int i = 0; i < 1000; i++) {
-		char *dup = ft_strdup(src);
-		free(dup);
-	}
-	cr_assert(1, "Benchmark completed");
-}
-
 // ============================================================================
 // FT_WRITE TESTS
 // ============================================================================
@@ -447,28 +412,9 @@ Test(ft_write, closed_fd) {
 	cr_assert_eq(asm_errno, libc_errno, "ft_write should set same errno as libc");
 }
 
-Test(ft_write, benchmark) {
-	int fd = open("/tmp/test_write_ft.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	char *msg = "The quick brown fox";
-	for (int i = 0; i < 1000; i++) {
-		ft_write(fd, msg, strlen(msg));
-	}
-	close(fd);
-	cr_assert(1, "Benchmark completed");
-	unlink("/tmp/test_write_ft.txt");
-}
-
 // ============================================================================
 // FT_READ TESTS
 // ============================================================================
-
-Test(ft_read, read_from_file_setup) {
-	int fd = open("/tmp/test_read_input.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	cr_assert_neq(fd, -1, "Should create test file");
-	write(fd, "Hello from file!\n", 17);
-	write(fd, "Second line\n", 12);
-	close(fd);
-}
 
 Test(ft_read, read_from_file) {
 	// Setup test file
@@ -552,21 +498,162 @@ Test(ft_read, closed_fd) {
 	unlink("/tmp/test_read_input.txt");
 }
 
-Test(ft_read, benchmark) {
-	int fd = open("/tmp/test_read_input.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	char *content = "The quick brown fox jumps over the lazy dog";
-	for (int i = 0; i < 100; i++) {
-		write(fd, content, strlen(content));
-	}
-	close(fd);
+// ============================================================================
+// FT_ATOI_BASE TESTS
+// ============================================================================
 
-	char buf[4096];
-	for (int i = 0; i < 1000; i++) {
-		fd = open("/tmp/test_read_input.txt", O_RDONLY);
-		ft_read(fd, buf, sizeof(buf));
-		close(fd);
-	}
+Test(ft_atoi_base, binary_conversion) {
+	int result_ft = ft_atoi_base("1010", "01");
+	int result_c = ft_atoi_base_in_C("1010", "01");
 
-	unlink("/tmp/test_read_input.txt");
-	cr_assert(1, "Benchmark completed");
+	cr_assert_eq(result_ft, 10, "ft_atoi_base should convert '1010' binary to 10");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, decimal_conversion) {
+	int result_ft = ft_atoi_base("123", "0123456789");
+	int result_c = ft_atoi_base_in_C("123", "0123456789");
+
+	cr_assert_eq(result_ft, 123, "ft_atoi_base should convert '123' decimal to 123");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, hexadecimal_conversion) {
+	int result_ft = ft_atoi_base("FF", "0123456789ABCDEF");
+	int result_c = ft_atoi_base_in_C("FF", "0123456789ABCDEF");
+
+	cr_assert_eq(result_ft, 255, "ft_atoi_base should convert 'FF' hex to 255");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, hex_lowercase) {
+	int result_ft = ft_atoi_base("ab12", "0123456789abcdef");
+	int result_c = ft_atoi_base_in_C("ab12", "0123456789abcdef");
+
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should handle lowercase hex");
+}
+
+Test(ft_atoi_base, octal_conversion) {
+	int result_ft = ft_atoi_base("755", "01234567");
+	int result_c = ft_atoi_base_in_C("755", "01234567");
+
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should convert octal correctly");
+	cr_assert_eq(result_ft, 493, "ft_atoi_base should convert '755' octal to 493");
+}
+
+Test(ft_atoi_base, custom_base_characters) {
+	int result_ft = ft_atoi_base("BBA", "ABCDEFGHIJ");
+	int result_c = ft_atoi_base_in_C("BBA", "ABCDEFGHIJ");
+
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should work with custom character bases");
+}
+
+Test(ft_atoi_base, empty_string) {
+	int result_ft = ft_atoi_base("", "0123456789");
+	int result_c = ft_atoi_base_in_C("", "0123456789");
+
+	cr_assert_eq(result_ft, 0, "ft_atoi_base should return 0 for empty string");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, single_digit) {
+	int result_ft = ft_atoi_base("5", "0123456789");
+	int result_c = ft_atoi_base_in_C("5", "0123456789");
+
+	cr_assert_eq(result_ft, 5, "ft_atoi_base should convert single digit '5'");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, leading_zeros) {
+	int result_ft = ft_atoi_base("00123", "0123456789");
+	int result_c = ft_atoi_base_in_C("00123", "0123456789");
+
+	cr_assert_eq(result_ft, 123, "ft_atoi_base should handle leading zeros");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, large_number) {
+	int result_ft = ft_atoi_base("999", "0123456789");
+	int result_c = ft_atoi_base_in_C("999", "0123456789");
+
+	cr_assert_eq(result_ft, 999, "ft_atoi_base should convert large number '999'");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, base_less_than_two) {
+	int result_ft = ft_atoi_base("5", "0");
+	int result_c = ft_atoi_base_in_C("5", "0");
+
+	cr_assert_eq(result_ft, 0, "ft_atoi_base should return 0 for base < 2");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, base_with_whitespace) {
+	int result_ft = ft_atoi_base("123", "0 23456789");
+	int result_c = ft_atoi_base_in_C("123", "0 23456789");
+
+	cr_assert_eq(result_ft, 0, "ft_atoi_base should return 0 for base with whitespace");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, base_with_plus_sign) {
+	int result_ft = ft_atoi_base("123", "+0123456789");
+	int result_c = ft_atoi_base_in_C("123", "+0123456789");
+
+	cr_assert_eq(result_ft, 0, "ft_atoi_base should return 0 for base with '+'");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, base_with_minus_sign) {
+	int result_ft = ft_atoi_base("123", "01234-56789");
+	int result_c = ft_atoi_base_in_C("123", "01234-56789");
+
+	cr_assert_eq(result_ft, 0, "ft_atoi_base should return 0 for base with '-'");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, base_with_duplicate_characters) {
+	int result_ft = ft_atoi_base("123", "01234567899");
+	int result_c = ft_atoi_base_in_C("123", "01234567899");
+
+	cr_assert_eq(result_ft, 0, "ft_atoi_base should return 0 for base with duplicates");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, base_of_two) {
+	int result_ft = ft_atoi_base("11111111", "01");
+	int result_c = ft_atoi_base_in_C("11111111", "01");
+
+	cr_assert_eq(result_ft, 255, "ft_atoi_base should convert '11111111' binary to 255");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, special_characters_base) {
+	int result_ft = ft_atoi_base("@#$", "@#$%&");
+	int result_c = ft_atoi_base_in_C("@#$", "@#$%&");
+
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should work with special character bases");
+}
+
+Test(ft_atoi_base, zero_result) {
+	int result_ft = ft_atoi_base("0", "0123456789");
+	int result_c = ft_atoi_base_in_C("0", "0123456789");
+
+	cr_assert_eq(result_ft, 0, "ft_atoi_base should return 0 for '0'");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, multiple_zeros) {
+	int result_ft = ft_atoi_base("000", "0123456789");
+	int result_c = ft_atoi_base_in_C("000", "0123456789");
+
+	cr_assert_eq(result_ft, 0, "ft_atoi_base should return 0 for '000'");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, base_16_mixed_case) {
+	int result_ft = ft_atoi_base("aA2f", "0123456789abcdefABCDEF");
+	int result_c = ft_atoi_base_in_C("aA2f", "0123456789abcdefABCDEF");
+
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should handle mixed case in base");
 }

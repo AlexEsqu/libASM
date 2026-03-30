@@ -1,6 +1,5 @@
 #include "../inc/libft.h"
 
-
 int ft_atoi_base_in_C(char *str, char *base)
 {
 	int baseLen = ft_strlen(base);

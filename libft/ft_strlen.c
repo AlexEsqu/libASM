@@ -4,11 +4,12 @@
 size_t ft_strlen_in_C(const char* str)
 {
 	size_t len = 0;
+	size_t i = 0;
 
-	while (*str != '\0')
+	while (str[i] != '\0')
 	{
 		len++;
-		str++;
+		i++;
 	}
 
 	return len;
