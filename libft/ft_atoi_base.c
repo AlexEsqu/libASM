@@ -45,6 +45,10 @@ int ft_atoi_base_in_C(char *str, char *base)
 		{
 			currentValue++;
 			currentChar++;
+
+			// exit character not in the base
+			if (*currentChar == 0)
+				return (0);
 		}
 		result = result * baseLen;
 		result += currentValue;

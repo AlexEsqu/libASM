@@ -66,12 +66,15 @@ _atoiSetUp:
 
 _atoiLoop:
 	CMP byte [rcx],0
-	JE _endAtoiLoop
+	JE _end
 	MOV r8,0			; Register 8 will contain the index of the current num character in the base string
 						; not using Register D cuz it gets wiped during multiplication operations
 
 	_baseLoop:
 		MOV r9b, byte [rsi + r8]	; Register 9 contains the value at current base string
+
+		CMP r9b,0		; check if baseString is over
+		JE _errorEnd	; if so, current character is not in the base
 
 		CMP byte [rcx],r9b
 		JE _baseLoopEnd
@@ -80,13 +83,12 @@ _atoiLoop:
 		JMP _baseLoop
 
 	_baseLoopEnd:
-
 		MUL rbx			; multiply register A by the base length
 		ADD rax, r8		; add index in the base string as value to result
 		INC rcx			; increment numStr
 		JMP _atoiLoop
 
-_endAtoiLoop:
+_end:
 					; Register A contains the calculated result
 	POP rbx
 	POP r8
@@ -95,9 +97,6 @@ _endAtoiLoop:
 
 _errorEnd:
 	MOV rax,0		; Register A is set at 0 to return 0
-	POP rbx
-	POP r8
-	POP r9
-	RET
+	JMP _end
 
 section .note.GNU-stack noalloc noexec nowrite progbits
