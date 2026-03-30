@@ -24,6 +24,7 @@ _errorExit:
 	NEG rax					; get absolute value of syscall return code
 	MOV rcx,rax				; move return code into register C
 	CALL __errno_location wrt ..plt	; put address of errno into register A
+							; with respect to .. Procedure linkage table
 	MOV [rax],rcx			; put return code value at address stored in register C (errno location)
 	MOV rax,-1				; put -1 as return value for read
 	RET
