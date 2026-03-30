@@ -68,6 +68,31 @@ Test(ft_strlen, single_character) {
 	cr_assert_eq(len_ft, len_libc, "ft_strlen should match libc strlen");
 }
 
+Test(ft_strlen, with_null_in_middle) {
+	char str[] = "hello\0world\0end";
+	size_t len_ft = ft_strlen(str);
+	size_t len_c = ft_strlen_in_C(str);
+	size_t len_libc = strlen(str);
+
+	cr_assert_eq(len_ft, 5, "ft_strlen should stop at first null terminator");
+	cr_assert_eq(len_ft, len_c, "ft_strlen should match ft_strlen_in_C");
+	cr_assert_eq(len_ft, len_libc, "ft_strlen should match libc strlen");
+}
+
+Test(ft_strlen, large_string) {
+	char *str = malloc(5000);
+	memset(str, 'a', 4999);
+	str[4999] = '\0';
+	size_t len_ft = ft_strlen(str);
+	size_t len_c = ft_strlen_in_C(str);
+	size_t len_libc = strlen(str);
+
+	cr_assert_eq(len_ft, 4999, "ft_strlen should handle large strings");
+	cr_assert_eq(len_ft, len_c, "ft_strlen should match ft_strlen_in_C");
+	cr_assert_eq(len_ft, len_libc, "ft_strlen should match libc strlen");
+	free(str);
+}
+
 // ============================================================================
 // FT_STRCMP TESTS
 // ============================================================================
@@ -150,6 +175,35 @@ Test(ft_strcmp, prefix_comparison) {
 		"ft_strcmp should match libc strcmp sign");
 }
 
+Test(ft_strcmp, case_sensitive) {
+	int result_ABC = ft_strcmp("ABC", "abc");
+	int result_c_ABC = ft_strcmp_in_C("ABC", "abc");
+
+	cr_assert_neq(result_ABC, 0, "ft_strcmp should be case sensitive");
+	cr_assert_eq((result_ABC > 0) - (result_ABC < 0), (result_c_ABC > 0) - (result_c_ABC < 0),
+		"ft_strcmp case sensitivity should match ft_strcmp_in_C");
+}
+
+Test(ft_strcmp, single_char_difference) {
+	int cmp_a_b = ft_strcmp("a", "b");
+	int cmp_a_b_c = ft_strcmp_in_C("a", "b");
+
+	cr_assert_lt(cmp_a_b, 0, "ft_strcmp should return negative for 'a' < 'b'");
+	cr_assert_eq((cmp_a_b > 0) - (cmp_a_b < 0), (cmp_a_b_c > 0) - (cmp_a_b_c < 0),
+		"ft_strcmp should match ft_strcmp_in_C sign");
+}
+
+Test(ft_strcmp, different_lengths) {
+	char *s1 = "test";
+	char *s2 = "testing";
+	int cmp_ft = ft_strcmp(s1, s2);
+	int cmp_libc = strcmp(s1, s2);
+
+	cr_assert_lt(cmp_ft, 0, "Shorter prefix should be less");
+	cr_assert_eq((cmp_ft > 0) - (cmp_ft < 0), (cmp_libc > 0) - (cmp_libc < 0),
+		"ft_strcmp should match libc strcmp");
+}
+
 // ============================================================================
 // FT_STRCPY TESTS
 // ============================================================================
@@ -226,6 +280,19 @@ Test(ft_strcpy, return_value) {
 	cr_assert_eq(ret_ft, buf_ft, "ft_strcpy should return pointer to destination");
 	cr_assert_eq(ret_c, buf_c, "ft_strcpy_in_C should return pointer to destination");
 	cr_assert_eq(ret_libc, buf_libc, "libc strcpy should return pointer to destination");
+}
+
+Test(ft_strcpy, buffer_ends_correctly) {
+	char buf_ft[10], buf_c[10], buf_libc[10];
+	char *src = "12345";
+
+	ft_strcpy(buf_ft, src);
+	ft_strcpy_in_C(buf_c, src);
+	strcpy(buf_libc, src);
+
+	cr_assert_eq(buf_ft[5], '\0', "ft_strcpy should null-terminate");
+	cr_assert_eq(buf_c[5], '\0', "ft_strcpy_in_C should null-terminate");
+	cr_assert_eq(buf_libc[5], '\0', "libc strcpy should null-terminate");
 }
 
 // ============================================================================
@@ -329,11 +396,23 @@ Test(ft_strdup, single_character) {
 	free(dup_libc);
 }
 
+Test(ft_strdup, different_addresses) {
+	char *src = "testing";
+	char *dup1 = ft_strdup(src);
+	char *dup2 = ft_strdup(src);
+
+	cr_assert_neq(dup1, dup2, "Multiple strdups should allocate different addresses");
+	cr_assert_str_eq(dup1, dup2, "But contents should be equal");
+
+	free(dup1);
+	free(dup2);
+}
+
 // ============================================================================
 // FT_WRITE TESTS
 // ============================================================================
 
-Test(ft_write, write_to_stdout, .disabled = 1) {
+Test(ft_write, write_to_stdout) {
 	char *msg = "Test ft_write to stdout";
 	ssize_t ret_ft = ft_write(1, msg, strlen(msg));
 	ssize_t ret_libc = write(1, msg, strlen(msg));
@@ -410,6 +489,28 @@ Test(ft_write, closed_fd) {
 
 	cr_assert_eq(ret_ft, ret_libc, "ft_write should return same value as libc");
 	cr_assert_eq(asm_errno, libc_errno, "ft_write should set same errno as libc");
+}
+
+Test(ft_write, multiple_writes) {
+	int fd = open("/tmp/multi_write.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	ssize_t ret1 = ft_write(fd, "a", 1);
+	ssize_t ret2 = ft_write(fd, "b", 1);
+	ssize_t ret3 = ft_write(fd, "c", 1);
+	close(fd);
+
+	cr_assert_eq(ret1, 1, "First write should return 1");
+	cr_assert_eq(ret2, 1, "Second write should return 1");
+	cr_assert_eq(ret3, 1, "Third write should return 1");
+
+	unlink("/tmp/multi_write.txt");
+}
+
+Test(ft_write, stderr_write) {
+	ssize_t ret_ft = ft_write(2, "error", 5);
+	ssize_t ret_libc = write(2, "error", 5);
+
+	cr_assert_eq(ret_ft, 5, "ft_write to stderr should write all bytes");
+	cr_assert_eq(ret_ft, ret_libc, "ft_write to stderr should match libc");
 }
 
 // ============================================================================
@@ -496,6 +597,52 @@ Test(ft_read, closed_fd) {
 	cr_assert_eq(asm_errno, libc_errno, "ft_read should set same errno as libc");
 
 	unlink("/tmp/test_read_input.txt");
+}
+
+Test(ft_read, read_multiple_chunks) {
+	int fd = open("/tmp/test_large.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	for (int i = 0; i < 100; i++)
+		write(fd, "test", 4);
+	close(fd);
+
+	char buf1[50], buf2[50];
+	memset(buf1, 0, 50);
+	memset(buf2, 0, 50);
+
+	fd = open("/tmp/test_large.txt", O_RDONLY);
+	ssize_t ret1 = ft_read(fd, buf1, 50);
+	ssize_t ret2 = ft_read(fd, buf2, 50);
+	close(fd);
+
+	cr_assert_eq(ret1, 50, "First read should return 50");
+	cr_assert_eq(ret2, 50, "Second read should return 50");
+	cr_assert_neq(buf1[0], buf2[0], "Sequential reads should get different data");
+
+	unlink("/tmp/test_large.txt");
+}
+
+Test(ft_read, read_entire_file) {
+	int fd = open("/tmp/test_read_all.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	char *test_data = "Test file content";
+	write(fd, test_data, strlen(test_data));
+	close(fd);
+
+	char buf_ft[100], buf_libc[100];
+	memset(buf_ft, 0, 100);
+	memset(buf_libc, 0, 100);
+
+	fd = open("/tmp/test_read_all.txt", O_RDONLY);
+	ssize_t ret_ft = ft_read(fd, buf_ft, sizeof(buf_ft));
+	close(fd);
+
+	fd = open("/tmp/test_read_all.txt", O_RDONLY);
+	ssize_t ret_libc = read(fd, buf_libc, sizeof(buf_libc));
+	close(fd);
+
+	cr_assert_eq(ret_ft, ret_libc, "ft_read should return same bytes as libc");
+	cr_assert_arr_eq(buf_ft, buf_libc, ret_ft, "ft_read buffer should match libc");
+
+	unlink("/tmp/test_read_all.txt");
 }
 
 // ============================================================================
@@ -656,4 +803,27 @@ Test(ft_atoi_base, base_16_mixed_case) {
 	int result_c = ft_atoi_base_in_C("aA2f", "0123456789abcdefABCDEF");
 
 	cr_assert_eq(result_ft, result_c, "ft_atoi_base should handle mixed case in base");
+}
+
+Test(ft_atoi_base, invalid_characters) {
+	int result_ft = ft_atoi_base("XYZ", "0123456789");
+	int result_c = ft_atoi_base_in_C("XYZ", "0123456789");
+
+	cr_assert_eq(result_ft, 0, "ft_atoi_base should return 0 for invalid chars");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
+}
+
+Test(ft_atoi_base, very_large_base) {
+	int result_ft = ft_atoi_base("test", "abcdefghijklmnopqrstuvwxyz");
+	int result_c = ft_atoi_base_in_C("test", "abcdefghijklmnopqrstuvwxyz");
+
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should handle base 26");
+}
+
+Test(ft_atoi_base, single_char_in_string) {
+	int result_ft = ft_atoi_base("A", "ABCDEFGHIJ");
+	int result_c = ft_atoi_base_in_C("A", "ABCDEFGHIJ");
+
+	cr_assert_eq(result_ft, 0, "ft_atoi_base should convert 'A' in custom base");
+	cr_assert_eq(result_ft, result_c, "ft_atoi_base should match ft_atoi_base_in_C");
 }
