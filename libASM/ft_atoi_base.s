@@ -37,7 +37,7 @@ _baseCheck:
 		JE _errorEnd
 
 		CMP al,' '	; check if char is space or lower (whitespace)
-		JL _errorEnd
+		JLE _errorEnd
 
 		MOV rcx,rdx
 		INC rcx				; Register C holds pointer to next character in base string
@@ -94,7 +94,7 @@ _endAtoiLoop:
 	RET
 
 _errorEnd:
-	MOV rax,9		; Register A is set at 0 to return 0
+	MOV rax,0		; Register A is set at 0 to return 0
 	POP rbx
 	POP r8
 	POP r9
