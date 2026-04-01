@@ -61,11 +61,10 @@ CFLAGS		= -Wall -Wextra -Werror -fno-builtin
 DEBUGFLAG	= -g
 DISASMFLAG	= -S -mllvm --x86-asm-syntax=intel
 ASMFLAGS	= -f elf64
-TESTFLAGS	= -L.. -lasm -lft -lcriterion
+TESTFLAGS	= -L.. -lasm -lft
 
-PKG_CONFIG	= pkg-config
-CRIT_CFLAGS	= $(shell $(PKG_CONFIG) --cflags criterion 2>/dev/null || echo "-I/usr/include")
-CRIT_LDFLAGS	= $(shell $(PKG_CONFIG) --libs criterion 2>/dev/null || echo "-lcriterion")
+CRIT_INC_FLAG	= -I$$HOME/Criterion/include
+CRIT_LIB_FLAG	= -L$$HOME/Criterion/build/src -Wl,-rpath=$$HOME/Criterion/build/src -lcriterion
 
 #####################################
 #									#
@@ -106,7 +105,9 @@ main:		$(NAME) $(LIBFT) $(SRCS_MAIN)
 
 # Compile library with unit tests
 unit_test:	$(NAME) $(LIBFT) $(SRCS_TEST)
-			$(GCC) $(DEBUGFLAG) $(CFLAGS) $(CRIT_CFLAGS) -I$(INC_DIR) $(SRCS_TEST) -o $@ -L. -lasm -lft $(CRIT_LDFLAGS)
+			chmod 777 ./tests/install_tester.sh
+			./tests/install_tester.sh
+			$(GCC) $(DEBUGFLAG) $(CFLAGS) $(CRIT_INC_FLAG) -I$(INC_DIR) $(SRCS_TEST) -o $@ -L. -lasm -lft $(CRIT_LIB_FLAG)
 			./unit_test --verbose
 
 # Compile library with benchmarks

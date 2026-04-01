@@ -417,7 +417,7 @@ Test(ft_write, write_to_stdout) {
 	ssize_t ret_ft = ft_write(1, msg, strlen(msg));
 	ssize_t ret_libc = write(1, msg, strlen(msg));
 
-	cr_assert_eq(ret_ft, strlen(msg), "ft_write should write all bytes");
+	cr_assert_eq(ret_ft, (ssize_t)strlen(msg), "ft_write should write all bytes");
 	cr_assert_eq(ret_ft, ret_libc, "ft_write should match libc write");
 }
 
