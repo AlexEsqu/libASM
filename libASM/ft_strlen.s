@@ -3,7 +3,8 @@ global ft_strlen			; make the ft_strlen function public / accessible by other pr
 ft_strlen:
 	; GET ARGUMENTS
 	; use C Linux calling convention for x86_64 to retrieve the arguments given to the function
-	MOV rax,rdi				; put first argument, start of the string, into register A
+							; first argument is stored in register destination index
+							; using it directly instead of storing it in a different register
 
 	; INITIALIZE RESULT
 	; The value returned by RET is the one contained in register C
@@ -14,15 +15,16 @@ ft_strlen:
 	; XOR rcx,rcx			; smaller sized operation to zero a register, alternative to MOV rcx,0
 
 count_char:
-	CMP byte [rax], 0		; compare the byte at memory address in register A to 0 (which is ASCII for NULL)
+	CMP byte [rdi], 0		; compare the byte at memory address in register A to 0 (which is ASCII for NULL)
 	JE endLoop				; if character is NULL, jump to end loop
 							; else the program continues linearly
 	INC rcx					; increment register C (which contains the length of the word)
-	INC rax					; increment register A (which contains the address of the current character in the string)
+	INC rdi					; increment register A (which contains the address of the current character in the string)
 
 	JMP count_char			; start the loop again
 
 endLoop:
+	MOV rax,rcx				; more perf to use rax to accumulate, but by convention using rcx
 	RET						; returns the value in register A
 
 ; to avoid annoying linker error, specifying the executable risks of the function

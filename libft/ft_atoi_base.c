@@ -2,13 +2,9 @@
 
 int ft_atoi_base_in_C(char *str, char *base)
 {
-	int baseLen = ft_strlen(base);
-
 	// CHECK BASE
-
-	if (baseLen < 2)
-		return (0);
-
+	
+	int baseLen = 0;
 	char* currBase = base;
 	while (*currBase)
 	{
@@ -29,7 +25,11 @@ int ft_atoi_base_in_C(char *str, char *base)
 			otherChar++;
 		}
 		currBase++;
+		baseLen++;
 	}
+
+	if (baseLen < 2)
+		return (0);
 
 	// ATOI
 

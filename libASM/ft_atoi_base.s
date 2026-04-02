@@ -1,98 +1,86 @@
 global ft_atoi_base
 
 ft_atoi_base:
-	PUSH rbx
-	PUSH r8
-	PUSH r9
 
-	MOV rdx,rsi		; put start of base string into register D
-	MOV rax,0		; initialize register A to 0
+	; GET ARGUMENTS
+	; use GCC calling convention to retrieve the arguments given to the function
+	; in x86-64, non floats arguments are put into rdi, rsi, rdx, rcx, r8, r9, then the stack
+	; RDI holds char* numStr
+	; RSI holds char* baseStr
 
-_strlenLoop:
-	CMP byte [rdx],0
-	JE _baseCheck
-	INC rax
-	INC rdx
+	MOV rbx,rsi		; put start of base string into register B
+	MOV rcx,0		; initialize register C to 0 => holding numString len
 
-	JMP _strlenLoop
-
+; checking the base provided is legit
 _baseCheck:
-	MOV rbx,rax		; store value of base string length in register B
-	CMP rbx,2		; check if base is at least 2
-	JL _errorEnd
+	MOV al, byte [rbx]	; subset of register A holds currentBaseChar
 
-	MOV rdx,rsi		; Register D holds pointer to start of the base string
+	CMP al,0			; while (char currentBaseChar != '\0')
+	JE _atoiSetUp
 
-	_baseCheckLoop:
+	CMP al,'+'			; if char currentBaseChar == '+' error
+	JE _errorEnd
 
-		MOV al, byte [rdx]	; subset of register A holds the current character's value
+	CMP al,'-'			; if char currentBaseChar == '-' error
+	JE _errorEnd
 
-		CMP al,0	; iterate over base string
-		JE _atoiSetUp
+	CMP al,' '			; if char currentBaseChar <= ' ' error
+	JLE _errorEnd
 
-		CMP al,'+'	; check if char is +
+	MOV rdx,rbx
+	INC rdx				; register D holds char* baseStr + 1
+
+	_checkDuplicateLoop:
+		CMP byte [rdx],0			; while (*nextBaseChar != 0)
+		JE _checkDuplicateLoopEnd
+
+		CMP al, byte [rdx]			; if two characters are identical, return error
 		JE _errorEnd
 
-		CMP al,'-'	; check if char is -
-		JE _errorEnd
+		INC rdx						; else increment and check until end of base string
 
-		CMP al,' '	; check if char is space or lower (whitespace)
-		JLE _errorEnd
+		JMP _checkDuplicateLoop
 
-		MOV rcx,rdx
-		INC rcx				; Register C holds pointer to next character in base string
+	_checkDuplicateLoopEnd:
 
-			_baseCheckCompareLoop:
+	INC rcx				; baseLen++
+	INC rbx				; baseStr++
 
-			CMP byte [rcx],0		; while (*nextChar)
-			JE _baseCheckCompareLoopEnd
-
-			CMP al, byte [rcx]	; if two characters are identical, return error
-			JE _errorEnd
-
-			INC rcx						; else increment and check until end of base string
-
-			JMP _baseCheckCompareLoop
-
-	_baseCheckCompareLoopEnd:
-
-		INC rdx
-
-		JMP _baseCheckLoop
+	JMP _baseCheck
 
 _atoiSetUp:
+	CMP rcx,2	; check if baseLen is at least 2
+	JL _errorEnd
+
 	MOV rax,0	; Register A will contains the result of the atoi, initialized at 0
-	MOV rcx,rdi	; Register C still contains a pointer to numStr start, extracted from argument 1
+				; Register Destination Index contains the start of the numStr, as arg 1
 
 _atoiLoop:
-	CMP byte [rcx],0
+	CMP byte [rdi],0
 	JE _end
-	MOV r8,0			; Register 8 will contain the index of the current num character in the base string
+	MOV rbx,0			; Register B will contain the index of the current num character in the base string
 						; not using Register D cuz it gets wiped during multiplication operations
 
 	_baseLoop:
-		MOV r9b, byte [rsi + r8]	; Register 9 contains the value at current base string
+		MOV r8b, byte [rsi + rbx]	; Register A contains the value at current base string
 
-		CMP r9b,0		; check if baseString is over
+		CMP r8b,0		; check if baseString is over
 		JE _errorEnd	; if so, current character is not in the base
 
-		CMP byte [rcx],r9b
+		CMP byte [rdi],r8b
 		JE _baseLoopEnd
 
-		INC r8			; Increment base string
+		INC rbx			; Increment base string
 		JMP _baseLoop
 
 	_baseLoopEnd:
-		MUL rbx			; multiply register A by the base length
-		ADD rax, r8		; add index in the base string as value to result
-		INC rcx			; increment numStr
+		MUL rcx			; multiply register A by the base length
+		ADD rax, rbx	; add index in the base string as value to result
+		INC rdi			; increment numStr
 		JMP _atoiLoop
 
 _end:
 					; Register A contains the calculated result
-	POP rbx
-	POP r8
-	POP r9
 	RET
 
 _errorEnd:
