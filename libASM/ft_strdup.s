@@ -8,14 +8,11 @@ ft_strdup:
 	; PROLOG - ALIGN THE STACK
 	; to comply with Application Binary Interface (ABI), setting lower 4 bits of the stack to 0
 	; to garantee that RSP % 16 == 0 now before the call, and then RSP % 16 == 8 on function entry
-	PUSH rbp		; equivalent to SUB rsp,8 and MOV [rsp],rbp
+	; PUSH rbp		; equivalent to SUB rsp,8 and MOV [rsp],rbp
 					; so adding 8 bits for
 
 	; GET ARGUMENTS
 	; use GCC calling convention stating non float arguments are stored in rdi, rsi, rdx, rcx, r8, r9, then the stack
-	PUSH rbx		; store the value of register B, and free it up to use it ourselves
-					; since I call other functions which may make use of my registers,
-					; and this value need to stay the same, I use a non volatile register
 	MOV rbx,rdi		; GET ARG 1 - put char pointer of originalString into register B to preserve it
 
 	; GET STRING LENGTH
@@ -37,8 +34,7 @@ ft_strdup:
 	CALL ft_strcpy	; copy source string into destination string AND put destination string pointer into register A
 
 	; EPILOG - RETURN ORIGINAL VALUES
-	POP rbx			; retrieve the original value of register B
-	POP rbp			; retrieve the original base pointer
+	; POP rbp			; retrieve the original base pointer
 
 	RET			; register A already contains destination string which needs to be returned
 

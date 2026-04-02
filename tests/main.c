@@ -1,6 +1,8 @@
 #include "../inc/libft.h"
 #include "stdio.h"
 
+
+
 int main(void)
 {
 	char*	intInStr = "10";
